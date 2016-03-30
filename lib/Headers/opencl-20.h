@@ -3914,6 +3914,7 @@ int4 __attribute__((overloadable)) read_imagei(read_only image3d_t image, sample
 uint4 __attribute__((overloadable)) read_imageui(read_only image3d_t image, sampler_t sampler, int4 coord);
 uint4 __attribute__((overloadable)) read_imageui(read_only image3d_t image, sampler_t sampler, float4 coord);
 
+#if defined(cl_khr_gl_msaa_sharing)
 /**
  * Use the coordinate (cood.xy) and sample to do an
  * element lookup in the 2D multi-sample image specified
@@ -4006,36 +4007,43 @@ float __attribute__((overloadable)) read_imagef(read_only image2d_msaa_depth_t i
 float __attribute__((overloadable)) read_imagef(read_only image2d_depth_t image, sampler_t sampler, float2 coord);
 float __attribute__((overloadable)) read_imagef(read_only image2d_depth_t image, sampler_t sampler, int2 coord);
 float __attribute__((overloadable)) read_imagef(read_only image2d_depth_t image, int2 coord);
+#endif
 
 /**
  * Return the image width in pixels.
  */
 int __attribute__((overloadable)) get_image_width(image2d_t image);
 int __attribute__((overloadable)) get_image_width(image2d_depth_t image);
+int __attribute__((overloadable)) get_image_width(image3d_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_width(image2d_msaa_t image);
 int __attribute__((overloadable)) get_image_width(image2d_msaa_depth_t image);
-int __attribute__((overloadable)) get_image_width(image3d_t image);
+#endif
 
 /**
  * Return the image height in pixels.
  */
 int __attribute__((overloadable)) get_image_height(image2d_t image);
 int __attribute__((overloadable)) get_image_height(image2d_depth_t image);
+int __attribute__((overloadable)) get_image_height(image3d_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_height(image2d_msaa_t image);
 int __attribute__((overloadable)) get_image_height(image2d_msaa_depth_t image);
-int __attribute__((overloadable)) get_image_height(image3d_t image);
+#endif
 
 /**
  * Return the image depth in pixels.
  */
 int __attribute__((overloadable)) get_image_depth(image3d_t image);
 
+#if defined(cl_khr_gl_msaa_sharing)
 /**
 * Return the number of samples associated with image
 */
 int __attribute__((overloadable)) get_image_num_samples(image2d_msaa_t image);
 int __attribute__((overloadable)) get_image_num_samples(image2d_msaa_depth_t image);
 int __attribute__((overloadable)) get_image_num_samples(image2d_array_msaa_depth_t image);
+#endif
 
 /**
  * Return the channel data type. Valid values are:
@@ -4099,8 +4107,10 @@ int __attribute__((overloadable)) get_image_num_samples(image2d_array_msaa_depth
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_t image);
 int __attribute__((overloadable)) get_image_channel_data_type(image3d_t image);
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_msaa_t image);
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_msaa_depth_t image);
+#endif
 
 /**
  * Return the image channel order. Valid values are:
@@ -4121,8 +4131,10 @@ int __attribute__((overloadable)) get_image_channel_data_type(image2d_msaa_depth
 int __attribute__((overloadable)) get_image_channel_order(image2d_t image);
 int __attribute__((overloadable)) get_image_channel_order(image3d_t image);
 int __attribute__((overloadable)) get_image_channel_order(image2d_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_channel_order(image2d_msaa_t image);
 int __attribute__((overloadable)) get_image_channel_order(image2d_msaa_depth_t image);
+#endif
 
 /**
  * Return the 2D image width and height as an int2
@@ -4131,8 +4143,10 @@ int __attribute__((overloadable)) get_image_channel_order(image2d_msaa_depth_t i
  */
 int2 __attribute__((overloadable)) get_image_dim(image2d_t image);
 int2 __attribute__((overloadable)) get_image_dim(image2d_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int2 __attribute__((overloadable)) get_image_dim(image2d_msaa_t image);
 int2 __attribute__((overloadable)) get_image_dim(image2d_msaa_depth_t image);
+#endif
 
 /**
  * Return the 3D image width, height, and depth as an
@@ -11188,23 +11202,22 @@ void __attribute__((overloadable)) prefetch(const __global void *p, size_t num_e
 #define CL_QUEUED                                   0x3
 
 #define CLK_SUCCESS                                 0
-#define CLK_ENQUEUE_FAILURE                         1
-
-#define CLK_INVALID_QUEUE                           -20
-#define CLK_INVALID_NDRANGE                         -30
-#define CLK_INVALID_EVENT_WAIT_LIST                 -40
-#define CLK_DEVICE_QUEUE_FULL                       -50
-#define CLK_INVALID_ARG_SIZE                        -60
-#define CLK_EVENT_ALLOCATION_FAILURE                -70
-#define CLK_OUT_OF_RESOURCES                        -80
+#define CLK_ENQUEUE_FAILURE                         -101
+#define CLK_INVALID_QUEUE                           -102
+#define CLK_INVALID_NDRANGE                         -160
+#define CLK_INVALID_EVENT_WAIT_LIST                 -57
+#define CLK_DEVICE_QUEUE_FULL                       -161
+#define CLK_INVALID_ARG_SIZE                        -51
+#define CLK_EVENT_ALLOCATION_FAILURE                -100
+#define CLK_OUT_OF_RESOURCES                        -5
 
 #define CLK_NULL_QUEUE                              0
 #define CLK_NULL_EVENT (__builtin_astype(((void*)(UINT32MAX)), clk_event_t))
 
 // execution model related definitions
-#define CLK_ENQUEUE_FLAGS_NO_WAIT                   0xf0
-#define CLK_ENQUEUE_FLAGS_WAIT_KERNEL               0xf1
-#define CLK_ENQUEUE_FLAGS_WAIT_WORK_GROUP           0xf2
+#define CLK_ENQUEUE_FLAGS_NO_WAIT                   0x0
+#define CLK_ENQUEUE_FLAGS_WAIT_KERNEL               0x1
+#define CLK_ENQUEUE_FLAGS_WAIT_WORK_GROUP           0x2
 
 typedef int kernel_enqueue_flags_t;
 typedef int clk_profiling_info;
@@ -11220,12 +11233,14 @@ bool __attribute__((overloadable)) is_valid_reserve_id(reserve_id_t reserve_id);
 #define CLK_PROFILING_COMMAND_EXEC_TIME 0x1
 
 #define MAX_WORK_DIM        3
+#if defined(__clang__) && (__clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 9))
 typedef struct {
     unsigned int workDimension;
     size_t globalWorkOffset[MAX_WORK_DIM];
     size_t globalWorkSize[MAX_WORK_DIM];
     size_t localWorkSize[MAX_WORK_DIM];
 } ndrange_t;
+#endif
 
 ndrange_t __attribute__((overloadable)) ndrange_1D(size_t);
 ndrange_t __attribute__((overloadable)) ndrange_1D(size_t, size_t );
@@ -11271,7 +11286,7 @@ void __attribute__((overloadable)) retain_event(clk_event_t);
 
 void __attribute__((overloadable)) release_event(clk_event_t);
 
-clk_event_t create_user_event();
+clk_event_t create_user_event(void);
 
 void __attribute__((overloadable)) set_user_event_status( clk_event_t e, int state );
 
@@ -11279,7 +11294,292 @@ bool is_valid_event (clk_event_t event);
 
 void __attribute__((overloadable)) capture_event_profiling_info(clk_event_t, clk_profiling_info, __global void* value);
 
-queue_t get_default_queue();
+queue_t __attribute__((overloadable)) get_default_queue(void);
+
+// OpenCL 1.x atomic functions
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old + val) and store result at location
+ * pointed by p. The function returns old.
+ */
+
+int __attribute__((overloadable)) atomic_add(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_add(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_add(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_add(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_base_atomics)
+int __attribute__((overloadable)) atom_add(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_add(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_add(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_add(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_base_atomics)
+long __attribute__((overloadable)) atom_add(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_add(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_add(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_add(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * unsigned int atomic_sub (volatile __global unsigned int *p, unsigned int val)
+ * int atomic_sub (volatile __local int *p, int val)
+ * unsigned int atomic_sub (volatile __local unsigned int *p, unsigned int val)
+ *
+ * Read the 32-bit value (referred to as old) stored at location pointed by p.
+ * Compute (old - val) and store result at location pointed by p. The function
+ * returns old.
+ */
+int __attribute__((overloadable)) atomic_sub(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_sub(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_sub(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_sub(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_base_atomics)
+int __attribute__((overloadable)) atom_sub(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_sub(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_sub(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_sub(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_base_atomics)
+long __attribute__((overloadable)) atom_sub(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_sub(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_sub(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_sub(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * Swaps the old value stored at location p
+ * with new value given by val. Returns old
+ * value.
+ */
+int __attribute__((overloadable)) atomic_xchg(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_xchg(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_xchg(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_xchg(volatile __local unsigned int *p, unsigned int val);
+float __attribute__((overloadable)) atomic_xchg(volatile __global float *p, float val);
+float __attribute__((overloadable)) atomic_xchg(volatile __local float *p, float val);
+
+#if defined(cl_khr_int32_base_atomics)
+int __attribute__((overloadable)) atom_xchg(volatile __global int *p, int val);
+int __attribute__((overloadable)) atom_xchg(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_xchg(volatile __global unsigned int *p, unsigned int val);
+unsigned int __attribute__((overloadable)) atom_xchg(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_base_atomics)
+long __attribute__((overloadable)) atom_xchg(volatile __global long *p, long val);
+long __attribute__((overloadable)) atom_xchg(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_xchg(volatile __global unsigned long *p, unsigned long val);
+unsigned long __attribute__((overloadable)) atom_xchg(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old + 1) and store result at location
+ * pointed by p. The function returns old.
+ */
+int __attribute__((overloadable)) atomic_inc(volatile __global int *p);
+unsigned int __attribute__((overloadable)) atomic_inc(volatile __global unsigned int *p);
+int __attribute__((overloadable)) atomic_inc(volatile __local int *p);
+unsigned int __attribute__((overloadable)) atomic_inc(volatile __local unsigned int *p);
+
+#if defined(cl_khr_int32_base_atomics)
+int __attribute__((overloadable)) atom_inc(volatile __global int *p);
+unsigned int __attribute__((overloadable)) atom_inc(volatile __global unsigned int *p);
+int __attribute__((overloadable)) atom_inc(volatile __local int *p);
+unsigned int __attribute__((overloadable)) atom_inc(volatile __local unsigned int *p);
+#endif
+
+#if defined(cl_khr_int64_base_atomics)
+long __attribute__((overloadable)) atom_inc(volatile __global long *p);
+unsigned long __attribute__((overloadable)) atom_inc(volatile __global unsigned long *p);
+long __attribute__((overloadable)) atom_inc(volatile __local long *p);
+unsigned long __attribute__((overloadable)) atom_inc(volatile __local unsigned long *p);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old - 1) and store result at location
+ * pointed by p. The function returns old.
+ */
+int __attribute__((overloadable)) atomic_dec(volatile __global int *p);
+unsigned int __attribute__((overloadable)) atomic_dec(volatile __global unsigned int *p);
+int __attribute__((overloadable)) atomic_dec(volatile __local int *p);
+unsigned int __attribute__((overloadable)) atomic_dec(volatile __local unsigned int *p);
+
+#if defined(cl_khr_int32_base_atomics)
+int __attribute__((overloadable)) atom_dec(volatile __global int *p);
+unsigned int __attribute__((overloadable)) atom_dec(volatile __global unsigned int *p);
+int __attribute__((overloadable)) atom_dec(volatile __local int *p);
+unsigned int __attribute__((overloadable)) atom_dec(volatile __local unsigned int *p);
+#endif
+
+#if defined(cl_khr_int64_base_atomics)
+long __attribute__((overloadable)) atom_dec(volatile __global long *p);
+unsigned long __attribute__((overloadable)) atom_dec(volatile __global unsigned long *p);
+long __attribute__((overloadable)) atom_dec(volatile __local long *p);
+unsigned long __attribute__((overloadable)) atom_dec(volatile __local unsigned long *p);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old == cmp) ? val : old and store result at
+ * location pointed by p. The function
+ * returns old.
+ */
+int __attribute__((overloadable)) atomic_cmpxchg(volatile __global int *p, int cmp, int val);
+unsigned int __attribute__((overloadable)) atomic_cmpxchg(volatile __global unsigned int *p, unsigned int cmp, unsigned int val);
+int __attribute__((overloadable)) atomic_cmpxchg(volatile __local int *p, int cmp, int val);
+unsigned int __attribute__((overloadable)) atomic_cmpxchg(volatile __local unsigned int *p, unsigned int cmp, unsigned int val);
+
+#if defined(cl_khr_int32_base_atomics)
+int __attribute__((overloadable)) atom_cmpxchg(volatile __global int *p, int cmp, int val);
+unsigned int __attribute__((overloadable)) atom_cmpxchg(volatile __global unsigned int *p, unsigned int cmp, unsigned int val);
+int __attribute__((overloadable)) atom_cmpxchg(volatile __local int *p, int cmp, int val);
+unsigned int __attribute__((overloadable)) atom_cmpxchg(volatile __local unsigned int *p, unsigned int cmp, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_base_atomics)
+long __attribute__((overloadable)) atom_cmpxchg(volatile __global long *p, long cmp, long val);
+unsigned long __attribute__((overloadable)) atom_cmpxchg(volatile __global unsigned long *p, unsigned long cmp, unsigned long val);
+long __attribute__((overloadable)) atom_cmpxchg(volatile __local long *p, long cmp, long val);
+unsigned long __attribute__((overloadable)) atom_cmpxchg(volatile __local unsigned long *p, unsigned long cmp, unsigned long val);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * min(old, val) and store minimum value at
+ * location pointed by p. The function
+ * returns old.
+ */
+int __attribute__((overloadable)) atomic_min(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_min(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_min(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_min(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_extended_atomics)
+int __attribute__((overloadable)) atom_min(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_min(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_min(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_min(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_extended_atomics)
+long __attribute__((overloadable)) atom_min(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_min(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_min(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_min(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * max(old, val) and store maximum value at
+ * location pointed by p. The function
+ * returns old.
+ */
+int __attribute__((overloadable)) atomic_max(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_max(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_max(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_max(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_extended_atomics)
+int __attribute__((overloadable)) atom_max(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_max(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_max(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_max(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_extended_atomics)
+long __attribute__((overloadable)) atom_max(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_max(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_max(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_max(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old & val) and store result at location
+ * pointed by p. The function returns old.
+ */
+int __attribute__((overloadable)) atomic_and(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_and(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_and(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_and(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_extended_atomics)
+int __attribute__((overloadable)) atom_and(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_and(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_and(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_and(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_extended_atomics)
+long __attribute__((overloadable)) atom_and(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_and(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_and(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_and(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old | val) and store result at location
+ * pointed by p. The function returns old.
+ */
+int __attribute__((overloadable)) atomic_or(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_or(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_or(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_or(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_extended_atomics)
+int __attribute__((overloadable)) atom_or(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_or(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_or(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_or(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_extended_atomics)
+long __attribute__((overloadable)) atom_or(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_or(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_or(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_or(volatile __local unsigned long *p, unsigned long val);
+#endif
+
+/**
+ * Read the 32-bit value (referred to as old)
+ * stored at location pointed by p. Compute
+ * (old ^ val) and store result at location
+ * pointed by p. The function returns old.
+ */
+int __attribute__((overloadable)) atomic_xor(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_xor(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atomic_xor(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atomic_xor(volatile __local unsigned int *p, unsigned int val);
+
+#if defined(cl_khr_int32_extended_atomics)
+int __attribute__((overloadable)) atom_xor(volatile __global int *p, int val);
+unsigned int __attribute__((overloadable)) atom_xor(volatile __global unsigned int *p, unsigned int val);
+int __attribute__((overloadable)) atom_xor(volatile __local int *p, int val);
+unsigned int __attribute__((overloadable)) atom_xor(volatile __local unsigned int *p, unsigned int val);
+#endif
+
+#if defined(cl_khr_int64_extended_atomics)
+long __attribute__((overloadable)) atom_xor(volatile __global long *p, long val);
+unsigned long __attribute__((overloadable)) atom_xor(volatile __global unsigned long *p, unsigned long val);
+long __attribute__((overloadable)) atom_xor(volatile __local long *p, long val);
+unsigned long __attribute__((overloadable)) atom_xor(volatile __local unsigned long *p, unsigned long val);
+#endif
 
 //
 // c11 atomics definitions
@@ -11292,11 +11592,11 @@ queue_t get_default_queue();
 // enum values aligned with what clang uses in EmitAtomicExpr()
 typedef enum memory_order
 {
-  memory_order_relaxed = 0,
-  memory_order_acquire = 2,
-  memory_order_release = 3,
-  memory_order_acq_rel = 4,
-  memory_order_seq_cst = 5
+  memory_order_relaxed,
+  memory_order_acquire,
+  memory_order_release,
+  memory_order_acq_rel,
+  memory_order_seq_cst
 } memory_order;
 
 typedef enum memory_scope
@@ -11585,8 +11885,8 @@ DECL_WORK_GROUP_SCAN_INCLUSIVE_ALL(double)
 
 // Workitem builtins
 size_t __attribute__((overloadable)) get_enqueued_local_size(uint dimindx);
-size_t __attribute__((overloadable)) get_global_linear_id();
-size_t __attribute__((overloadable)) get_local_linear_id();
+size_t __attribute__((overloadable)) get_global_linear_id(void);
+size_t __attribute__((overloadable)) get_local_linear_id(void);
 
 /**
  * Queue a memory fence to ensure correct ordering of memory
@@ -12179,6 +12479,7 @@ void __attribute__((overloadable)) write_imagef(write_only image2d_array_t image
 void __attribute__((overloadable)) write_imagei(write_only image2d_array_t image_array, int4 coord, int4 color);
 void __attribute__((overloadable)) write_imageui(write_only image2d_array_t image_array, int4 coord, uint4 color);
 
+#if defined(cl_khr_gl_msaa_sharing)
 /**
  * Use coord.xy and sample to do an element
  * lookup in the 2D multi-sample image layer
@@ -12244,6 +12545,7 @@ uint4 __attribute__((overloadable)) read_imageui(read_only image2d_array_msaa_t 
  * in the description above are undefined.
  */
 float __attribute__((overloadable)) read_imagef(read_only image2d_array_msaa_depth_t image, int4 coord, int sample);
+#endif
 
 /**
  * Use coord.xy to do an element lookup in the
@@ -12318,10 +12620,13 @@ float __attribute__((overloadable)) read_imagef(read_only image2d_array_depth_t 
 void __attribute__((overloadable)) write_imagef(write_only image2d_depth_t image, int2 coord, float color);
 void __attribute__((overloadable)) write_imagef(write_only image2d_array_depth_t image, int4 coord, float color);
 
+#if defined(cl_khr_gl_msaa_sharing)
 /**
  * Return the number of samples associated with image
  */
 int __attribute__((overloadable)) get_image_num_samples(image2d_array_msaa_t image);
+int __attribute__((overloadable)) get_image_num_samples(image2d_array_msaa_depth_t image);
+#endif
 
 /**
  * Return the image width.
@@ -12332,8 +12637,10 @@ int __attribute__((overloadable)) get_image_width(image1d_buffer_t image);
 int __attribute__((overloadable)) get_image_width(image1d_array_t image);
 int __attribute__((overloadable)) get_image_width(image2d_array_t image);
 int __attribute__((overloadable)) get_image_width(image2d_array_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_width(image2d_array_msaa_t image);
 int __attribute__((overloadable)) get_image_width(image2d_array_msaa_depth_t image);
+#endif
 
 /**
  * Return the image height.
@@ -12341,8 +12648,10 @@ int __attribute__((overloadable)) get_image_width(image2d_array_msaa_depth_t ima
 
 int __attribute__((overloadable)) get_image_height(image2d_array_t image);
 int __attribute__((overloadable)) get_image_height(image2d_array_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_height(image2d_array_msaa_t image);
 int __attribute__((overloadable)) get_image_height(image2d_array_msaa_depth_t image);
+#endif
 
 /**
  * Return the image array size.
@@ -12351,8 +12660,10 @@ int __attribute__((overloadable)) get_image_height(image2d_array_msaa_depth_t im
 size_t __attribute__((overloadable)) get_image_array_size(image1d_array_t image_array);
 size_t __attribute__((overloadable)) get_image_array_size(image2d_array_t image_array);
 size_t __attribute__((overloadable)) get_image_array_size(image2d_array_depth_t image_array);
+#if defined(cl_khr_gl_msaa_sharing)
 size_t __attribute__((overloadable)) get_image_array_size(image2d_array_msaa_t image_array);
 size_t __attribute__((overloadable)) get_image_array_size(image2d_array_msaa_depth_t image_array);
+#endif
 
 /**
  * Return the channel data type. Valid values are:
@@ -12378,8 +12689,10 @@ int __attribute__((overloadable)) get_image_channel_data_type(image1d_buffer_t i
 int __attribute__((overloadable)) get_image_channel_data_type(image1d_array_t image);
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_array_t image);
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_array_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_array_msaa_t image);
 int __attribute__((overloadable)) get_image_channel_data_type(image2d_array_msaa_depth_t image);
+#endif
 
 /**
  * Return the image channel order. Valid values are:
@@ -12406,8 +12719,10 @@ int __attribute__((overloadable)) get_image_channel_order(image1d_buffer_t image
 int __attribute__((overloadable)) get_image_channel_order(image1d_array_t image);
 int __attribute__((overloadable)) get_image_channel_order(image2d_array_t image);
 int __attribute__((overloadable)) get_image_channel_order(image2d_array_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int __attribute__((overloadable)) get_image_channel_order(image2d_array_msaa_t image);
 int __attribute__((overloadable)) get_image_channel_order(image2d_array_msaa_depth_t image);
+#endif
 
 /**
  * Return the 2D image width and height as an int2
@@ -12416,8 +12731,10 @@ int __attribute__((overloadable)) get_image_channel_order(image2d_array_msaa_dep
  */
 int2 __attribute__((overloadable)) get_image_dim(image2d_array_t image);
 int2 __attribute__((overloadable)) get_image_dim(image2d_array_depth_t image);
+#if defined(cl_khr_gl_msaa_sharing)
 int2 __attribute__((overloadable)) get_image_dim(image2d_array_msaa_t image);
 int2 __attribute__((overloadable)) get_image_dim(image2d_array_msaa_depth_t image);
+#endif
 
 /**
 * Sampler-less Image Access

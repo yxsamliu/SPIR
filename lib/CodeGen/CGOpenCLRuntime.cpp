@@ -77,7 +77,11 @@ llvm::Type *CGOpenCLRuntime::convertOpenCLSpecificType(const Type *T) {
     return llvm::PointerType::get(llvm::StructType::create(
                            Ctx, "opencl.image3d_t"), ImgAddrSpc);
   case BuiltinType::OCLSampler:
-    return llvm::IntegerType::get(Ctx, 32);
+    if (CGM.getLangOpts().CLKeepSamplerType)
+      return llvm::StructType::create(Ctx, llvm::IntegerType::get(Ctx, 32),
+                                      "opencl.sampler_t");
+    else
+      return llvm::IntegerType::get(Ctx, 32);
   case BuiltinType::OCLEvent:
     return llvm::PointerType::get(llvm::StructType::create(
                            Ctx, "opencl.event_t"), 0);
@@ -137,12 +141,12 @@ llvm::Value *CGOpenCLRuntime::getPipeElemAlign(const Expr *PipeArg) {
 Ocl20Mangler::Ocl20Mangler(llvm::SmallVectorImpl<char>& SS): MangledString(&SS) {}
 
 Ocl20Mangler& Ocl20Mangler::appendReservedId() {
-  this->appendString("16ocl_reserve_id_t");
+  this->appendString("13ocl_reserveid");
   return *this;
 }
 
 Ocl20Mangler& Ocl20Mangler::appendPipe() {
-  this->appendString("10ocl_pipe_t");
+  this->appendString("8ocl_pipe");
   return *this;
 }
 

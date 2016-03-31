@@ -12,6 +12,11 @@
 #error "This header file should be used with SPIR target only."
 #endif
 
+// Optimizations
+
+#define const_func __attribute__((const))
+#define readonly __attribute__((pure))
+
 // built-in scalar data types:
 
 /**
@@ -229,88 +234,89 @@ typedef double double16 __attribute__((ext_vector_type(16)));
 // work-item functions
 
 /**
-* Returns the number of dimensions in use. This is the
-* value given to the work_dim argument specified in
-* clEnqueueNDRangeKernel.
-* For clEnqueueTask, this returns 1.
-*/
-uint __attribute__((overloadable)) get_work_dim(void);
+ * Returns the number of dimensions in use. This is the
+ * value given to the work_dim argument specified in
+ * clEnqueueNDRangeKernel.
+ * For clEnqueueTask, this returns 1.
+ */
+uint const_func __attribute__((overloadable)) get_work_dim(void);
 
 /**
-* Returns the number of global work-items specified for
-* dimension identified by dimindx. This value is given by
-* the global_work_size argument to
-* clEnqueueNDRangeKernel. Valid values of dimindx
-* are 0 to get_work_dim() - 1. For other values of
-* dimindx, get_global_size() returns 1.
-* For clEnqueueTask, this always returns 1.
-*/
-size_t __attribute__((overloadable)) get_global_size(uint dimindx);
+ * Returns the number of global work-items specified for
+ * dimension identified by dimindx. This value is given by
+ * the global_work_size argument to
+ * clEnqueueNDRangeKernel. Valid values of dimindx
+ * are 0 to get_work_dim() - 1. For other values of
+ * dimindx, get_global_size() returns 1.
+ * For clEnqueueTask, this always returns 1.
+ */
+size_t const_func __attribute__((overloadable)) get_global_size(uint dimindx);
 
 /**
-* Returns the unique global work-item ID value for
-* dimension identified by dimindx. The global work-item
-* ID specifies the work-item ID based on the number of
-* global work-items specified to execute the kernel. Valid
-* values of dimindx are 0 to get_work_dim() - 1. For
-* other values of dimindx, get_global_id() returns 0.
-* For clEnqueueTask, this returns 0.
-*/
-size_t __attribute__((overloadable)) get_global_id(uint dimindx);
+ * Returns the unique global work-item ID value for
+ * dimension identified by dimindx. The global work-item
+ * ID specifies the work-item ID based on the number of
+ * global work-items specified to execute the kernel. Valid
+ * values of dimindx are 0 to get_work_dim() - 1. For
+ * other values of dimindx, get_global_id() returns 0.
+ * For clEnqueueTask, this returns 0.
+ */
+size_t const_func __attribute__((overloadable)) get_global_id(uint dimindx);
 
 /**
-* Returns the number of local work-items specified in
-* dimension identified by dimindx. This value is given by
-* the local_work_size argument to
-* clEnqueueNDRangeKernel if local_work_size is not
-* NULL; otherwise the OpenCL implementation chooses
-* an appropriate local_work_size value which is returned
-* by this function. Valid values of dimindx are 0 to
-* get_work_dim() - 1. For other values of dimindx,
-* get_local_size() returns 1.
-* For clEnqueueTask, this always returns 1.
-*/
-size_t __attribute__((overloadable)) get_local_size(uint dimindx);
+ * Returns the number of local work-items specified in
+ * dimension identified by dimindx. This value is given by
+ * the local_work_size argument to
+ * clEnqueueNDRangeKernel if local_work_size is not
+ * NULL; otherwise the OpenCL implementation chooses
+ * an appropriate local_work_size value which is returned
+ * by this function. Valid values of dimindx are 0 to
+ * get_work_dim() - 1. For other values of dimindx,
+ * get_local_size() returns 1.
+ * For clEnqueueTask, this always returns 1.
+ */
+size_t const_func __attribute__((overloadable)) get_local_size(uint dimindx);
 
 /**
-* Returns the unique local work-item ID i.e. a work-item
-* within a specific work-group for dimension identified by
-* dimindx. Valid values of dimindx are 0 to
-* get_work_dim() - 1. For other values of dimindx,
-* get_local_id() returns 0.
-* For clEnqueueTask, this returns 0.
-*/
-size_t __attribute__((overloadable)) get_local_id(uint dimindx);
+ * Returns the unique local work-item ID i.e. a work-item
+ * within a specific work-group for dimension identified by
+ * dimindx. Valid values of dimindx are 0 to
+ * get_work_dim() - 1. For other values of dimindx,
+ * get_local_id() returns 0.
+ * For clEnqueueTask, this returns 0.
+ */
+size_t const_func __attribute__((overloadable)) get_local_id(uint dimindx);
 
 /**
-* Returns the number of work-groups that will execute a
-* kernel for dimension identified by dimindx.
-* Valid values of dimindx are 0 to get_work_dim() - 1.
-* For other values of dimindx, get_num_groups () returns
-* 1.
-* For clEnqueueTask, this always returns 1.
-*/
-size_t __attribute__((overloadable)) get_num_groups(uint dimindx);
+ * Returns the number of work-groups that will execute a
+ * kernel for dimension identified by dimindx.
+ * Valid values of dimindx are 0 to get_work_dim() - 1.
+ * For other values of dimindx, get_num_groups () returns
+ * 1.
+ * For clEnqueueTask, this always returns 1.
+ */
+size_t const_func __attribute__((overloadable)) get_num_groups(uint dimindx);
 
 /**
-* get_group_id returns the work-group ID which is a
-* number from 0 .. get_num_groups(dimindx) - 1.
-* Valid values of dimindx are 0 to get_work_dim() - 1.
-* For other values, get_group_id() returns 0.
-* For clEnqueueTask, this returns 0.
-*/
-size_t __attribute__((overloadable)) get_group_id(uint dimindx);
+ * get_group_id returns the work-group ID which is a
+ * number from 0 .. get_num_groups(dimindx) - 1.
+ * Valid values of dimindx are 0 to get_work_dim() - 1.
+ * For other values, get_group_id() returns 0.
+ * For clEnqueueTask, this returns 0.
+ */
+size_t const_func __attribute__((overloadable)) get_group_id(uint dimindx);
 
 /**
-* get_global_offset returns the offset values specified in
-* global_work_offset argument to
-* clEnqueueNDRangeKernel.
-* Valid values of dimindx are 0 to get_work_dim() - 1.
-* For other values, get_global_offset() returns 0.
-* For clEnqueueTask, this returns 0.
-*/
-size_t __attribute__((overloadable)) get_global_offset(uint dimindx);
+ * get_global_offset returns the offset values specified in
+ * global_work_offset argument to
+ * clEnqueueNDRangeKernel.
+ * Valid values of dimindx are 0 to get_work_dim() - 1.
+ * For other values, get_global_offset() returns 0.
+ * For clEnqueueTask, this returns 0.
+ */
+size_t const_func __attribute__((overloadable)) get_global_offset(uint dimindx);
 
+int printf(__constant const char* st, ...);
 // Math functions:
 
 /**
@@ -980,1080 +986,1094 @@ float16 __attribute__((overloadable)) trunc(float16);
 /**
  * Compute cosine. x must be in the range -2^16 ... +2^16.
  */
-float __attribute__((overloadable)) half_cos(float x);
-float2 __attribute__((overloadable)) half_cos(float2 x);
-float3 __attribute__((overloadable)) half_cos(float3 x);
-float4 __attribute__((overloadable)) half_cos(float4 x);
-float8 __attribute__((overloadable)) half_cos(float8 x);
-float16 __attribute__((overloadable)) half_cos(float16 x);
+float const_func __attribute__((overloadable)) half_cos(float x);
+float2 const_func __attribute__((overloadable)) half_cos(float2 x);
+float3 const_func __attribute__((overloadable)) half_cos(float3 x);
+float4 const_func __attribute__((overloadable)) half_cos(float4 x);
+float8 const_func __attribute__((overloadable)) half_cos(float8 x);
+float16 const_func __attribute__((overloadable)) half_cos(float16 x);
 
 /**
  * Compute x / y.
  */
-float __attribute__((overloadable)) half_divide(float x, float y);
-float2 __attribute__((overloadable)) half_divide(float2 x, float2 y);
-float3 __attribute__((overloadable)) half_divide(float3 x, float3 y);
-float4 __attribute__((overloadable)) half_divide(float4 x, float4 y);
-float8 __attribute__((overloadable)) half_divide(float8 x, float8 y);
-float16 __attribute__((overloadable)) half_divide(float16 x, float16 y);
+float const_func __attribute__((overloadable)) half_divide(float x, float y);
+float2 const_func __attribute__((overloadable)) half_divide(float2 x, float2 y);
+float3 const_func __attribute__((overloadable)) half_divide(float3 x, float3 y);
+float4 const_func __attribute__((overloadable)) half_divide(float4 x, float4 y);
+float8 const_func __attribute__((overloadable)) half_divide(float8 x, float8 y);
+float16 const_func __attribute__((overloadable)) half_divide(float16 x, float16 y);
 
 /**
  * Compute the base- e exponential of x.
  */
-float __attribute__((overloadable)) half_exp(float x);
-float2 __attribute__((overloadable)) half_exp(float2 x);
-float3 __attribute__((overloadable)) half_exp(float3 x);
-float4 __attribute__((overloadable)) half_exp(float4 x);
-float8 __attribute__((overloadable)) half_exp(float8 x);
-float16 __attribute__((overloadable)) half_exp(float16 x);
+float const_func __attribute__((overloadable)) half_exp(float x);
+float2 const_func __attribute__((overloadable)) half_exp(float2 x);
+float3 const_func __attribute__((overloadable)) half_exp(float3 x);
+float4 const_func __attribute__((overloadable)) half_exp(float4 x);
+float8 const_func __attribute__((overloadable)) half_exp(float8 x);
+float16 const_func __attribute__((overloadable)) half_exp(float16 x);
 
 /**
  * Compute the base- 2 exponential of x.
  */
-float __attribute__((overloadable)) half_exp2(float x);
-float2 __attribute__((overloadable)) half_exp2(float2 x);
-float3 __attribute__((overloadable)) half_exp2(float3 x);
-float4 __attribute__((overloadable)) half_exp2(float4 x);
-float8 __attribute__((overloadable)) half_exp2(float8 x);
-float16 __attribute__((overloadable)) half_exp2(float16 x);
+float const_func __attribute__((overloadable)) half_exp2(float x);
+float2 const_func __attribute__((overloadable)) half_exp2(float2 x);
+float3 const_func __attribute__((overloadable)) half_exp2(float3 x);
+float4 const_func __attribute__((overloadable)) half_exp2(float4 x);
+float8 const_func __attribute__((overloadable)) half_exp2(float8 x);
+float16 const_func __attribute__((overloadable)) half_exp2(float16 x);
 
 /**
  * Compute the base- 10 exponential of x.
  */
-float __attribute__((overloadable)) half_exp10(float x);
-float2 __attribute__((overloadable)) half_exp10(float2 x);
-float3 __attribute__((overloadable)) half_exp10(float3 x);
-float4 __attribute__((overloadable)) half_exp10(float4 x);
-float8 __attribute__((overloadable)) half_exp10(float8 x);
-float16 __attribute__((overloadable)) half_exp10(float16 x);
+float const_func __attribute__((overloadable)) half_exp10(float x);
+float2 const_func __attribute__((overloadable)) half_exp10(float2 x);
+float3 const_func __attribute__((overloadable)) half_exp10(float3 x);
+float4 const_func __attribute__((overloadable)) half_exp10(float4 x);
+float8 const_func __attribute__((overloadable)) half_exp10(float8 x);
+float16 const_func __attribute__((overloadable)) half_exp10(float16 x);
 
 /**
  * Compute natural logarithm.
  */
-float __attribute__((overloadable)) half_log(float x);
-float2 __attribute__((overloadable)) half_log(float2 x);
-float3 __attribute__((overloadable)) half_log(float3 x);
-float4 __attribute__((overloadable)) half_log(float4 x);
-float8 __attribute__((overloadable)) half_log(float8 x);
-float16 __attribute__((overloadable)) half_log(float16 x);
+float const_func __attribute__((overloadable)) half_log(float x);
+float2 const_func __attribute__((overloadable)) half_log(float2 x);
+float3 const_func __attribute__((overloadable)) half_log(float3 x);
+float4 const_func __attribute__((overloadable)) half_log(float4 x);
+float8 const_func __attribute__((overloadable)) half_log(float8 x);
+float16 const_func __attribute__((overloadable)) half_log(float16 x);
 
 /**
  * Compute a base 2 logarithm.
  */
-float __attribute__((overloadable)) half_log2(float x);
-float2 __attribute__((overloadable)) half_log2(float2 x);
-float3 __attribute__((overloadable)) half_log2(float3 x);
-float4 __attribute__((overloadable)) half_log2(float4 x);
-float8 __attribute__((overloadable)) half_log2(float8 x);
-float16 __attribute__((overloadable)) half_log2(float16 x);
+float const_func __attribute__((overloadable)) half_log2(float x);
+float2 const_func __attribute__((overloadable)) half_log2(float2 x);
+float3 const_func __attribute__((overloadable)) half_log2(float3 x);
+float4 const_func __attribute__((overloadable)) half_log2(float4 x);
+float8 const_func __attribute__((overloadable)) half_log2(float8 x);
+float16 const_func __attribute__((overloadable)) half_log2(float16 x);
 
 /**
  * Compute a base 10 logarithm.
  */
-float __attribute__((overloadable)) half_log10(float x);
-float2 __attribute__((overloadable)) half_log10(float2 x);
-float3 __attribute__((overloadable)) half_log10(float3 x);
-float4 __attribute__((overloadable)) half_log10(float4 x);
-float8 __attribute__((overloadable)) half_log10(float8 x);
-float16 __attribute__((overloadable)) half_log10(float16 x);
+float const_func __attribute__((overloadable)) half_log10(float x);
+float2 const_func __attribute__((overloadable)) half_log10(float2 x);
+float3 const_func __attribute__((overloadable)) half_log10(float3 x);
+float4 const_func __attribute__((overloadable)) half_log10(float4 x);
+float8 const_func __attribute__((overloadable)) half_log10(float8 x);
+float16 const_func __attribute__((overloadable)) half_log10(float16 x);
 
 /**
  * Compute x to the power y, where x is >= 0.
  */
-float __attribute__((overloadable)) half_powr(float x, float y);
-float2 __attribute__((overloadable)) half_powr(float2 x, float2 y);
-float3 __attribute__((overloadable)) half_powr(float3 x, float3 y);
-float4 __attribute__((overloadable)) half_powr(float4 x, float4 y);
-float8 __attribute__((overloadable)) half_powr(float8 x, float8 y);
-float16 __attribute__((overloadable)) half_powr(float16 x, float16 y);
+float const_func __attribute__((overloadable)) half_powr(float x, float y);
+float2 const_func __attribute__((overloadable)) half_powr(float2 x, float2 y);
+float3 const_func __attribute__((overloadable)) half_powr(float3 x, float3 y);
+float4 const_func __attribute__((overloadable)) half_powr(float4 x, float4 y);
+float8 const_func __attribute__((overloadable)) half_powr(float8 x, float8 y);
+float16 const_func __attribute__((overloadable)) half_powr(float16 x, float16 y);
 
 /**
  * Compute reciprocal.
  */
-float __attribute__((overloadable)) half_recip(float x);
-float2 __attribute__((overloadable)) half_recip(float2 x);
-float3 __attribute__((overloadable)) half_recip(float3 x);
-float4 __attribute__((overloadable)) half_recip(float4 x);
-float8 __attribute__((overloadable)) half_recip(float8 x);
-float16 __attribute__((overloadable)) half_recip(float16 x);
+float const_func __attribute__((overloadable)) half_recip(float x);
+float2 const_func __attribute__((overloadable)) half_recip(float2 x);
+float3 const_func __attribute__((overloadable)) half_recip(float3 x);
+float4 const_func __attribute__((overloadable)) half_recip(float4 x);
+float8 const_func __attribute__((overloadable)) half_recip(float8 x);
+float16 const_func __attribute__((overloadable)) half_recip(float16 x);
 
 /**
  * Compute inverse square root.
  */
-float __attribute__((overloadable)) half_rsqrt(float x);
-float2 __attribute__((overloadable)) half_rsqrt(float2 x);
-float3 __attribute__((overloadable)) half_rsqrt(float3 x);
-float4 __attribute__((overloadable)) half_rsqrt(float4 x);
-float8 __attribute__((overloadable)) half_rsqrt(float8 x);
-float16 __attribute__((overloadable)) half_rsqrt(float16 x);
+float const_func __attribute__((overloadable)) half_rsqrt(float x);
+float2 const_func __attribute__((overloadable)) half_rsqrt(float2 x);
+float3 const_func __attribute__((overloadable)) half_rsqrt(float3 x);
+float4 const_func __attribute__((overloadable)) half_rsqrt(float4 x);
+float8 const_func __attribute__((overloadable)) half_rsqrt(float8 x);
+float16 const_func __attribute__((overloadable)) half_rsqrt(float16 x);
 
 /**
  * Compute sine. x must be in the range -2^16 ... +2^16.
  */
-float __attribute__((overloadable)) half_sin(float x);
-float2 __attribute__((overloadable)) half_sin(float2 x);
-float3 __attribute__((overloadable)) half_sin(float3 x);
-float4 __attribute__((overloadable)) half_sin(float4 x);
-float8 __attribute__((overloadable)) half_sin(float8 x);
-float16 __attribute__((overloadable)) half_sin(float16 x);
+float const_func __attribute__((overloadable)) half_sin(float x);
+float2 const_func __attribute__((overloadable)) half_sin(float2 x);
+float3 const_func __attribute__((overloadable)) half_sin(float3 x);
+float4 const_func __attribute__((overloadable)) half_sin(float4 x);
+float8 const_func __attribute__((overloadable)) half_sin(float8 x);
+float16 const_func __attribute__((overloadable)) half_sin(float16 x);
 
 /**
  * Compute square root.
  */
-float __attribute__((overloadable)) half_sqrt(float x);
-float2 __attribute__((overloadable)) half_sqrt(float2 x);
-float3 __attribute__((overloadable)) half_sqrt(float3 x);
-float4 __attribute__((overloadable)) half_sqrt(float4 x);
-float8 __attribute__((overloadable)) half_sqrt(float8 x);
-float16 __attribute__((overloadable)) half_sqrt(float16 x);
+float const_func __attribute__((overloadable)) half_sqrt(float x);
+float2 const_func __attribute__((overloadable)) half_sqrt(float2 x);
+float3 const_func __attribute__((overloadable)) half_sqrt(float3 x);
+float4 const_func __attribute__((overloadable)) half_sqrt(float4 x);
+float8 const_func __attribute__((overloadable)) half_sqrt(float8 x);
+float16 const_func __attribute__((overloadable)) half_sqrt(float16 x);
 
 /**
  * Compute tangent. x must be in the range -216 ... +216.
  */
-float __attribute__((overloadable)) half_tan(float x);
-float2 __attribute__((overloadable)) half_tan(float2 x);
-float3 __attribute__((overloadable)) half_tan(float3 x);
-float4 __attribute__((overloadable)) half_tan(float4 x);
-float8 __attribute__((overloadable)) half_tan(float8 x);
-float16 __attribute__((overloadable)) half_tan(float16 x);
+float const_func __attribute__((overloadable)) half_tan(float x);
+float2 const_func __attribute__((overloadable)) half_tan(float2 x);
+float3 const_func __attribute__((overloadable)) half_tan(float3 x);
+float4 const_func __attribute__((overloadable)) half_tan(float4 x);
+float8 const_func __attribute__((overloadable)) half_tan(float8 x);
+float16 const_func __attribute__((overloadable)) half_tan(float16 x);
 
 /**
  * Compute cosine over an implementation-defined range.
  * The maximum error is implementation-defined.
  */
-float __attribute__((overloadable)) native_cos(float x);
-float2 __attribute__((overloadable)) native_cos(float2 x);
-float3 __attribute__((overloadable)) native_cos(float3 x);
-float4 __attribute__((overloadable)) native_cos(float4 x);
-float8 __attribute__((overloadable)) native_cos(float8 x);
-float16 __attribute__((overloadable)) native_cos(float16 x);
+float const_func __attribute__((overloadable)) native_cos(float x);
+float2 const_func __attribute__((overloadable)) native_cos(float2 x);
+float3 const_func __attribute__((overloadable)) native_cos(float3 x);
+float4 const_func __attribute__((overloadable)) native_cos(float4 x);
+float8 const_func __attribute__((overloadable)) native_cos(float8 x);
+float16 const_func __attribute__((overloadable)) native_cos(float16 x);
+
+// EXTENSION: native double
+double const_func __attribute__((overloadable)) native_cos(double x);
+double2 const_func __attribute__((overloadable)) native_cos(double2 x);
+double3 const_func __attribute__((overloadable)) native_cos(double3 x);
+double4 const_func __attribute__((overloadable)) native_cos(double4 x);
+double8 const_func __attribute__((overloadable)) native_cos(double8 x);
+double16 const_func __attribute__((overloadable)) native_cos(double16 x);
 
 /**
  * Compute x / y over an implementation-defined range.
  * The maximum error is implementation-defined.
  */
-float __attribute__((overloadable)) native_divide(float x, float y);
-float2 __attribute__((overloadable)) native_divide(float2 x, float2 y);
-float3 __attribute__((overloadable)) native_divide(float3 x, float3 y);
-float4 __attribute__((overloadable)) native_divide(float4 x, float4 y);
-float8 __attribute__((overloadable)) native_divide(float8 x, float8 y);
-float16 __attribute__((overloadable)) native_divide(float16 x, float16 y);
+float const_func __attribute__((overloadable)) native_divide(float x, float y);
+float2 const_func __attribute__((overloadable)) native_divide(float2 x, float2 y);
+float3 const_func __attribute__((overloadable)) native_divide(float3 x, float3 y);
+float4 const_func __attribute__((overloadable)) native_divide(float4 x, float4 y);
+float8 const_func __attribute__((overloadable)) native_divide(float8 x, float8 y);
+float16 const_func __attribute__((overloadable)) native_divide(float16 x, float16 y);
+
+// EXTENSION: native double
+double const_func __attribute__((overloadable)) native_divide(double x, double y);
+double2 const_func __attribute__((overloadable)) native_divide(double2 x, double2 y);
+double3 const_func __attribute__((overloadable)) native_divide(double3 x, double3 y);
+double4 const_func __attribute__((overloadable)) native_divide(double4 x, double4 y);
+double8 const_func __attribute__((overloadable)) native_divide(double8 x, double8 y);
+double16 const_func __attribute__((overloadable)) native_divide(double16 x, double16 y);
 
 /**
  * Compute the base- e exponential of x over an
  * implementation-defined range. The maximum error is
  * implementation-defined.
  */
-float __attribute__((overloadable)) native_exp(float x);
-float2 __attribute__((overloadable)) native_exp(float2 x);
-float3 __attribute__((overloadable)) native_exp(float3 x);
-float4 __attribute__((overloadable)) native_exp(float4 x);
-float8 __attribute__((overloadable)) native_exp(float8 x);
-float16 __attribute__((overloadable)) native_exp(float16 x);
+float const_func __attribute__((overloadable)) native_exp(float x);
+float2 const_func __attribute__((overloadable)) native_exp(float2 x);
+float3 const_func __attribute__((overloadable)) native_exp(float3 x);
+float4 const_func __attribute__((overloadable)) native_exp(float4 x);
+float8 const_func __attribute__((overloadable)) native_exp(float8 x);
+float16 const_func __attribute__((overloadable)) native_exp(float16 x);
 
 /**
  * Compute the base- 2 exponential of x over an
  * implementation-defined range. The maximum error is
  * implementation-defined.
  */
-float __attribute__((overloadable)) native_exp2(float x);
-float2 __attribute__((overloadable)) native_exp2(float2 x);
-float3 __attribute__((overloadable)) native_exp2(float3 x);
-float4 __attribute__((overloadable)) native_exp2(float4 x);
-float8 __attribute__((overloadable)) native_exp2(float8 x);
-float16 __attribute__((overloadable)) native_exp2(float16 x);
+float const_func __attribute__((overloadable)) native_exp2(float x);
+float2 const_func __attribute__((overloadable)) native_exp2(float2 x);
+float3 const_func __attribute__((overloadable)) native_exp2(float3 x);
+float4 const_func __attribute__((overloadable)) native_exp2(float4 x);
+float8 const_func __attribute__((overloadable)) native_exp2(float8 x);
+float16 const_func __attribute__((overloadable)) native_exp2(float16 x);
 
 /**
  * Compute the base- 10 exponential of x over an
  * implementation-defined range. The maximum error is
  * implementation-defined.
  */
-float __attribute__((overloadable)) native_exp10(float x);
-float2 __attribute__((overloadable)) native_exp10(float2 x);
-float3 __attribute__((overloadable)) native_exp10(float3 x);
-float4 __attribute__((overloadable)) native_exp10(float4 x);
-float8 __attribute__((overloadable)) native_exp10(float8 x);
-float16 __attribute__((overloadable)) native_exp10(float16 x);
+float const_func __attribute__((overloadable)) native_exp10(float x);
+float2 const_func __attribute__((overloadable)) native_exp10(float2 x);
+float3 const_func __attribute__((overloadable)) native_exp10(float3 x);
+float4 const_func __attribute__((overloadable)) native_exp10(float4 x);
+float8 const_func __attribute__((overloadable)) native_exp10(float8 x);
+float16 const_func __attribute__((overloadable)) native_exp10(float16 x);
 
 /**
  * Compute natural logarithm over an implementationdefined
  * range. The maximum error is implementation
  * defined.
  */
-float __attribute__((overloadable)) native_log(float x);
-float2 __attribute__((overloadable)) native_log(float2 x);
-float3 __attribute__((overloadable)) native_log(float3 x);
-float4 __attribute__((overloadable)) native_log(float4 x);
-float8 __attribute__((overloadable)) native_log(float8 x);
-float16 __attribute__((overloadable)) native_log(float16 x);
+float const_func __attribute__((overloadable)) native_log(float x);
+float2 const_func __attribute__((overloadable)) native_log(float2 x);
+float3 const_func __attribute__((overloadable)) native_log(float3 x);
+float4 const_func __attribute__((overloadable)) native_log(float4 x);
+float8 const_func __attribute__((overloadable)) native_log(float8 x);
+float16 const_func __attribute__((overloadable)) native_log(float16 x);
 
 /**
  * Compute a base 2 logarithm over an implementationdefined
  * range. The maximum error is implementationdefined.
  */
-float __attribute__((overloadable)) native_log2(float x);
-float2 __attribute__((overloadable)) native_log2(float2 x);
-float3 __attribute__((overloadable)) native_log2(float3 x);
-float4 __attribute__((overloadable)) native_log2(float4 x);
-float8 __attribute__((overloadable)) native_log2(float8 x);
-float16 __attribute__((overloadable)) native_log2(float16 x);
+float const_func __attribute__((overloadable)) native_log2(float x);
+float2 const_func __attribute__((overloadable)) native_log2(float2 x);
+float3 const_func __attribute__((overloadable)) native_log2(float3 x);
+float4 const_func __attribute__((overloadable)) native_log2(float4 x);
+float8 const_func __attribute__((overloadable)) native_log2(float8 x);
+float16 const_func __attribute__((overloadable)) native_log2(float16 x);
 
 /**
  * Compute a base 10 logarithm over an implementationdefined
  * range. The maximum error is implementationdefined.
  */
-float __attribute__((overloadable)) native_log10(float x);
-float2 __attribute__((overloadable)) native_log10(float2 x);
-float3 __attribute__((overloadable)) native_log10(float3 x);
-float4 __attribute__((overloadable)) native_log10(float4 x);
-float8 __attribute__((overloadable)) native_log10(float8 x);
-float16 __attribute__((overloadable)) native_log10(float16 x);
+float const_func __attribute__((overloadable)) native_log10(float x);
+float2 const_func __attribute__((overloadable)) native_log10(float2 x);
+float3 const_func __attribute__((overloadable)) native_log10(float3 x);
+float4 const_func __attribute__((overloadable)) native_log10(float4 x);
+float8 const_func __attribute__((overloadable)) native_log10(float8 x);
+float16 const_func __attribute__((overloadable)) native_log10(float16 x);
 
 /**
  * Compute x to the power y, where x is >= 0. The range of
  * x and y are implementation-defined. The maximum error
  * is implementation-defined.
  */
-float __attribute__((overloadable)) native_powr(float x, float y);
-float2 __attribute__((overloadable)) native_powr(float2 x, float2 y);
-float3 __attribute__((overloadable)) native_powr(float3 x, float3 y);
-float4 __attribute__((overloadable)) native_powr(float4 x, float4 y);
-float8 __attribute__((overloadable)) native_powr(float8 x, float8 y);
-float16 __attribute__((overloadable)) native_powr(float16 x, float16 y);
+float const_func __attribute__((overloadable)) native_powr(float x, float y);
+float2 const_func __attribute__((overloadable)) native_powr(float2 x, float2 y);
+float3 const_func __attribute__((overloadable)) native_powr(float3 x, float3 y);
+float4 const_func __attribute__((overloadable)) native_powr(float4 x, float4 y);
+float8 const_func __attribute__((overloadable)) native_powr(float8 x, float8 y);
+float16 const_func __attribute__((overloadable)) native_powr(float16 x, float16 y);
 
 /**
  * Compute reciprocal over an implementation-defined
  * range. The maximum error is implementation-defined.
  */
-float __attribute__((overloadable)) native_recip(float x);
-float2 __attribute__((overloadable)) native_recip(float2 x);
-float3 __attribute__((overloadable)) native_recip(float3 x);
-float4 __attribute__((overloadable)) native_recip(float4 x);
-float8 __attribute__((overloadable)) native_recip(float8 x);
-float16 __attribute__((overloadable)) native_recip(float16 x);
+float const_func __attribute__((overloadable)) native_recip(float x);
+float2 const_func __attribute__((overloadable)) native_recip(float2 x);
+float3 const_func __attribute__((overloadable)) native_recip(float3 x);
+float4 const_func __attribute__((overloadable)) native_recip(float4 x);
+float8 const_func __attribute__((overloadable)) native_recip(float8 x);
+float16 const_func __attribute__((overloadable)) native_recip(float16 x);
 
 /**
  * Compute inverse square root over an implementationdefined
  * range. The maximum error is implementationdefined.
  */
-float __attribute__((overloadable)) native_rsqrt(float x);
-float2 __attribute__((overloadable)) native_rsqrt(float2 x);
-float3 __attribute__((overloadable)) native_rsqrt(float3 x);
-float4 __attribute__((overloadable)) native_rsqrt(float4 x);
-float8 __attribute__((overloadable)) native_rsqrt(float8 x);
-float16 __attribute__((overloadable)) native_rsqrt(float16 x);
+float const_func __attribute__((overloadable)) native_rsqrt(float x);
+float2 const_func __attribute__((overloadable)) native_rsqrt(float2 x);
+float3 const_func __attribute__((overloadable)) native_rsqrt(float3 x);
+float4 const_func __attribute__((overloadable)) native_rsqrt(float4 x);
+float8 const_func __attribute__((overloadable)) native_rsqrt(float8 x);
+float16 const_func __attribute__((overloadable)) native_rsqrt(float16 x);
 
 /**
  * Compute sine over an implementation-defined range.
  * The maximum error is implementation-defined.
  */
-float __attribute__((overloadable)) native_sin(float x);
-float2 __attribute__((overloadable)) native_sin(float2 x);
-float3 __attribute__((overloadable)) native_sin(float3 x);
-float4 __attribute__((overloadable)) native_sin(float4 x);
-float8 __attribute__((overloadable)) native_sin(float8 x);
-float16 __attribute__((overloadable)) native_sin(float16 x);
+float const_func __attribute__((overloadable)) native_sin(float x);
+float2 const_func __attribute__((overloadable)) native_sin(float2 x);
+float3 const_func __attribute__((overloadable)) native_sin(float3 x);
+float4 const_func __attribute__((overloadable)) native_sin(float4 x);
+float8 const_func __attribute__((overloadable)) native_sin(float8 x);
+float16 const_func __attribute__((overloadable)) native_sin(float16 x);
 
 /**
  * Compute square root over an implementation-defined
  * range. The maximum error is implementation-defined.
  */
-float __attribute__((overloadable)) native_sqrt(float x);
-float2 __attribute__((overloadable)) native_sqrt(float2 x);
-float3 __attribute__((overloadable)) native_sqrt(float3 x);
-float4 __attribute__((overloadable)) native_sqrt(float4 x);
-float8 __attribute__((overloadable)) native_sqrt(float8 x);
-float16 __attribute__((overloadable)) native_sqrt(float16 x);
+float const_func __attribute__((overloadable)) native_sqrt(float x);
+float2 const_func __attribute__((overloadable)) native_sqrt(float2 x);
+float3 const_func __attribute__((overloadable)) native_sqrt(float3 x);
+float4 const_func __attribute__((overloadable)) native_sqrt(float4 x);
+float8 const_func __attribute__((overloadable)) native_sqrt(float8 x);
+float16 const_func __attribute__((overloadable)) native_sqrt(float16 x);
 
 /**
  * Compute tangent over an implementation-defined range.
  * The maximum error is implementation-defined.
  */
-float __attribute__((overloadable)) native_tan(float x);
-float2 __attribute__((overloadable)) native_tan(float2 x);
-float3 __attribute__((overloadable)) native_tan(float3 x);
-float4 __attribute__((overloadable)) native_tan(float4 x);
-float8 __attribute__((overloadable)) native_tan(float8 x);
-float16 __attribute__((overloadable)) native_tan(float16 x);
-
+float const_func __attribute__((overloadable)) native_tan(float x);
+float2 const_func __attribute__((overloadable)) native_tan(float2 x);
+float3 const_func __attribute__((overloadable)) native_tan(float3 x);
+float4 const_func __attribute__((overloadable)) native_tan(float4 x);
+float8 const_func __attribute__((overloadable)) native_tan(float8 x);
+float16 const_func __attribute__((overloadable)) native_tan(float16 x);
 
 // Integer functions:
 
 /**
  * Returns | x |.
  */
-uchar __attribute__((overloadable)) abs(char x);
-uchar __attribute__((overloadable)) abs(uchar x);
-uchar2 __attribute__((overloadable)) abs(char2 x);
-uchar2 __attribute__((overloadable)) abs(uchar2 x);
-uchar3 __attribute__((overloadable)) abs(char3 x);
-uchar3 __attribute__((overloadable)) abs(uchar3 x);
-uchar4 __attribute__((overloadable)) abs(char4 x);
-uchar4 __attribute__((overloadable)) abs(uchar4 x);
-uchar8 __attribute__((overloadable)) abs(char8 x);
-uchar8 __attribute__((overloadable)) abs(uchar8 x);
-uchar16 __attribute__((overloadable)) abs(char16 x);
-uchar16 __attribute__((overloadable)) abs(uchar16 x);
-ushort __attribute__((overloadable)) abs(short x);
-ushort __attribute__((overloadable)) abs(ushort x);
-ushort2 __attribute__((overloadable)) abs(short2 x);
-ushort2 __attribute__((overloadable)) abs(ushort2 x);
-ushort3 __attribute__((overloadable)) abs(short3 x);
-ushort3 __attribute__((overloadable)) abs(ushort3 x);
-ushort4 __attribute__((overloadable)) abs(short4 x);
-ushort4 __attribute__((overloadable)) abs(ushort4 x);
-ushort8 __attribute__((overloadable)) abs(short8 x);
-ushort8 __attribute__((overloadable)) abs(ushort8 x);
-ushort16 __attribute__((overloadable)) abs(short16 x);
-ushort16 __attribute__((overloadable)) abs(ushort16 x);
-uint __attribute__((overloadable)) abs(int x);
-uint __attribute__((overloadable)) abs(uint x);
-uint2 __attribute__((overloadable)) abs(int2 x);
-uint2 __attribute__((overloadable)) abs(uint2 x);
-uint3 __attribute__((overloadable)) abs(int3 x);
-uint3 __attribute__((overloadable)) abs(uint3 x);
-uint4 __attribute__((overloadable)) abs(int4 x);
-uint4 __attribute__((overloadable)) abs(uint4 x);
-uint8 __attribute__((overloadable)) abs(int8 x);
-uint8 __attribute__((overloadable)) abs(uint8 x);
-uint16 __attribute__((overloadable)) abs(int16 x);
-uint16 __attribute__((overloadable)) abs(uint16 x);
-ulong __attribute__((overloadable)) abs(long x);
-ulong __attribute__((overloadable)) abs(ulong x);
-ulong2 __attribute__((overloadable)) abs(long2 x);
-ulong2 __attribute__((overloadable)) abs(ulong2 x);
-ulong3 __attribute__((overloadable)) abs(long3 x);
-ulong3 __attribute__((overloadable)) abs(ulong3 x);
-ulong4 __attribute__((overloadable)) abs(long4 x);
-ulong4 __attribute__((overloadable)) abs(ulong4 x);
-ulong8 __attribute__((overloadable)) abs(long8 x);
-ulong8 __attribute__((overloadable)) abs(ulong8 x);
-ulong16 __attribute__((overloadable)) abs(long16 x);
-ulong16 __attribute__((overloadable)) abs(ulong16 x);
+uchar const_func __attribute__((overloadable)) abs(char x);
+uchar const_func __attribute__((overloadable)) abs(uchar x);
+uchar2 const_func __attribute__((overloadable)) abs(char2 x);
+uchar2 const_func __attribute__((overloadable)) abs(uchar2 x);
+uchar3 const_func __attribute__((overloadable)) abs(char3 x);
+uchar3 const_func __attribute__((overloadable)) abs(uchar3 x);
+uchar4 const_func __attribute__((overloadable)) abs(char4 x);
+uchar4 const_func __attribute__((overloadable)) abs(uchar4 x);
+uchar8 const_func __attribute__((overloadable)) abs(char8 x);
+uchar8 const_func __attribute__((overloadable)) abs(uchar8 x);
+uchar16 const_func __attribute__((overloadable)) abs(char16 x);
+uchar16 const_func __attribute__((overloadable)) abs(uchar16 x);
+ushort const_func __attribute__((overloadable)) abs(short x);
+ushort const_func __attribute__((overloadable)) abs(ushort x);
+ushort2 const_func __attribute__((overloadable)) abs(short2 x);
+ushort2 const_func __attribute__((overloadable)) abs(ushort2 x);
+ushort3 const_func __attribute__((overloadable)) abs(short3 x);
+ushort3 const_func __attribute__((overloadable)) abs(ushort3 x);
+ushort4 const_func __attribute__((overloadable)) abs(short4 x);
+ushort4 const_func __attribute__((overloadable)) abs(ushort4 x);
+ushort8 const_func __attribute__((overloadable)) abs(short8 x);
+ushort8 const_func __attribute__((overloadable)) abs(ushort8 x);
+ushort16 const_func __attribute__((overloadable)) abs(short16 x);
+ushort16 const_func __attribute__((overloadable)) abs(ushort16 x);
+uint const_func __attribute__((overloadable)) abs(int x);
+uint const_func __attribute__((overloadable)) abs(uint x);
+uint2 const_func __attribute__((overloadable)) abs(int2 x);
+uint2 const_func __attribute__((overloadable)) abs(uint2 x);
+uint3 const_func __attribute__((overloadable)) abs(int3 x);
+uint3 const_func __attribute__((overloadable)) abs(uint3 x);
+uint4 const_func __attribute__((overloadable)) abs(int4 x);
+uint4 const_func __attribute__((overloadable)) abs(uint4 x);
+uint8 const_func __attribute__((overloadable)) abs(int8 x);
+uint8 const_func __attribute__((overloadable)) abs(uint8 x);
+uint16 const_func __attribute__((overloadable)) abs(int16 x);
+uint16 const_func __attribute__((overloadable)) abs(uint16 x);
+ulong const_func __attribute__((overloadable)) abs(long x);
+ulong const_func __attribute__((overloadable)) abs(ulong x);
+ulong2 const_func __attribute__((overloadable)) abs(long2 x);
+ulong2 const_func __attribute__((overloadable)) abs(ulong2 x);
+ulong3 const_func __attribute__((overloadable)) abs(long3 x);
+ulong3 const_func __attribute__((overloadable)) abs(ulong3 x);
+ulong4 const_func __attribute__((overloadable)) abs(long4 x);
+ulong4 const_func __attribute__((overloadable)) abs(ulong4 x);
+ulong8 const_func __attribute__((overloadable)) abs(long8 x);
+ulong8 const_func __attribute__((overloadable)) abs(ulong8 x);
+ulong16 const_func __attribute__((overloadable)) abs(long16 x);
+ulong16 const_func __attribute__((overloadable)) abs(ulong16 x);
 
 /**
  * Returns | x - y | without modulo overflow.
  */
-uchar __attribute__((overloadable)) abs_diff(char x, char y);
-uchar __attribute__((overloadable)) abs_diff(uchar x, uchar y);
-uchar2 __attribute__((overloadable)) abs_diff(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) abs_diff(uchar2 x, uchar2 y);
-uchar3 __attribute__((overloadable)) abs_diff(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) abs_diff(uchar3 x, uchar3 y);
-uchar4 __attribute__((overloadable)) abs_diff(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) abs_diff(uchar4 x, uchar4 y);
-uchar8 __attribute__((overloadable)) abs_diff(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) abs_diff(uchar8 x, uchar8 y);
-uchar16 __attribute__((overloadable)) abs_diff(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) abs_diff(uchar16 x, uchar16 y);
-ushort __attribute__((overloadable)) abs_diff(short x, short y);
-ushort __attribute__((overloadable)) abs_diff(ushort x, ushort y);
-ushort2 __attribute__((overloadable)) abs_diff(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) abs_diff(ushort2 x, ushort2 y);
-ushort3 __attribute__((overloadable)) abs_diff(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) abs_diff(ushort3 x, ushort3 y);
-ushort4 __attribute__((overloadable)) abs_diff(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) abs_diff(ushort4 x, ushort4 y);
-ushort8 __attribute__((overloadable)) abs_diff(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) abs_diff(ushort8 x, ushort8 y);
-ushort16 __attribute__((overloadable)) abs_diff(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) abs_diff(ushort16 x, ushort16 y);
-uint __attribute__((overloadable)) abs_diff(int x, int y);
-uint __attribute__((overloadable)) abs_diff(uint x, uint y);
-uint2 __attribute__((overloadable)) abs_diff(int2 x, int2 y);
-uint2 __attribute__((overloadable)) abs_diff(uint2 x, uint2 y);
-uint3 __attribute__((overloadable)) abs_diff(int3 x, int3 y);
-uint3 __attribute__((overloadable)) abs_diff(uint3 x, uint3 y);
-uint4 __attribute__((overloadable)) abs_diff(int4 x, int4 y);
-uint4 __attribute__((overloadable)) abs_diff(uint4 x, uint4 y);
-uint8 __attribute__((overloadable)) abs_diff(int8 x, int8 y);
-uint8 __attribute__((overloadable)) abs_diff(uint8 x, uint8 y);
-uint16 __attribute__((overloadable)) abs_diff(int16 x, int16 y);
-uint16 __attribute__((overloadable)) abs_diff(uint16 x, uint16 y);
-ulong __attribute__((overloadable)) abs_diff(long x, long y);
-ulong __attribute__((overloadable)) abs_diff(ulong x, ulong y);
-ulong2 __attribute__((overloadable)) abs_diff(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) abs_diff(ulong2 x, ulong2 y);
-ulong3 __attribute__((overloadable)) abs_diff(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) abs_diff(ulong3 x, ulong3 y);
-ulong4 __attribute__((overloadable)) abs_diff(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) abs_diff(ulong4 x, ulong4 y);
-ulong8 __attribute__((overloadable)) abs_diff(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) abs_diff(ulong8 x, ulong8 y);
-ulong16 __attribute__((overloadable)) abs_diff(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) abs_diff(ulong16 x, ulong16 y);
+uchar const_func __attribute__((overloadable)) abs_diff(char x, char y);
+uchar const_func __attribute__((overloadable)) abs_diff(uchar x, uchar y);
+uchar2 const_func __attribute__((overloadable)) abs_diff(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) abs_diff(uchar2 x, uchar2 y);
+uchar3 const_func __attribute__((overloadable)) abs_diff(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) abs_diff(uchar3 x, uchar3 y);
+uchar4 const_func __attribute__((overloadable)) abs_diff(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) abs_diff(uchar4 x, uchar4 y);
+uchar8 const_func __attribute__((overloadable)) abs_diff(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) abs_diff(uchar8 x, uchar8 y);
+uchar16 const_func __attribute__((overloadable)) abs_diff(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) abs_diff(uchar16 x, uchar16 y);
+ushort const_func __attribute__((overloadable)) abs_diff(short x, short y);
+ushort const_func __attribute__((overloadable)) abs_diff(ushort x, ushort y);
+ushort2 const_func __attribute__((overloadable)) abs_diff(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) abs_diff(ushort2 x, ushort2 y);
+ushort3 const_func __attribute__((overloadable)) abs_diff(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) abs_diff(ushort3 x, ushort3 y);
+ushort4 const_func __attribute__((overloadable)) abs_diff(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) abs_diff(ushort4 x, ushort4 y);
+ushort8 const_func __attribute__((overloadable)) abs_diff(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) abs_diff(ushort8 x, ushort8 y);
+ushort16 const_func __attribute__((overloadable)) abs_diff(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) abs_diff(ushort16 x, ushort16 y);
+uint const_func __attribute__((overloadable)) abs_diff(int x, int y);
+uint const_func __attribute__((overloadable)) abs_diff(uint x, uint y);
+uint2 const_func __attribute__((overloadable)) abs_diff(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) abs_diff(uint2 x, uint2 y);
+uint3 const_func __attribute__((overloadable)) abs_diff(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) abs_diff(uint3 x, uint3 y);
+uint4 const_func __attribute__((overloadable)) abs_diff(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) abs_diff(uint4 x, uint4 y);
+uint8 const_func __attribute__((overloadable)) abs_diff(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) abs_diff(uint8 x, uint8 y);
+uint16 const_func __attribute__((overloadable)) abs_diff(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) abs_diff(uint16 x, uint16 y);
+ulong const_func __attribute__((overloadable)) abs_diff(long x, long y);
+ulong const_func __attribute__((overloadable)) abs_diff(ulong x, ulong y);
+ulong2 const_func __attribute__((overloadable)) abs_diff(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) abs_diff(ulong2 x, ulong2 y);
+ulong3 const_func __attribute__((overloadable)) abs_diff(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) abs_diff(ulong3 x, ulong3 y);
+ulong4 const_func __attribute__((overloadable)) abs_diff(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) abs_diff(ulong4 x, ulong4 y);
+ulong8 const_func __attribute__((overloadable)) abs_diff(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) abs_diff(ulong8 x, ulong8 y);
+ulong16 const_func __attribute__((overloadable)) abs_diff(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) abs_diff(ulong16 x, ulong16 y);
 
 /**
  * Returns x + y and saturates the result.
  */
-char __attribute__((overloadable)) add_sat(char x, char y);
-uchar __attribute__((overloadable)) add_sat(uchar x, uchar y);
-char2 __attribute__((overloadable)) add_sat(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) add_sat(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) add_sat(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) add_sat(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) add_sat(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) add_sat(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) add_sat(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) add_sat(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) add_sat(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) add_sat(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) add_sat(short x, short y);
-ushort __attribute__((overloadable)) add_sat(ushort x, ushort y);
-short2 __attribute__((overloadable)) add_sat(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) add_sat(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) add_sat(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) add_sat(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) add_sat(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) add_sat(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) add_sat(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) add_sat(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) add_sat(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) add_sat(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) add_sat(int x, int y);
-uint __attribute__((overloadable)) add_sat(uint x, uint y);
-int2 __attribute__((overloadable)) add_sat(int2 x, int2 y);
-uint2 __attribute__((overloadable)) add_sat(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) add_sat(int3 x, int3 y);
-uint3 __attribute__((overloadable)) add_sat(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) add_sat(int4 x, int4 y);
-uint4 __attribute__((overloadable)) add_sat(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) add_sat(int8 x, int8 y);
-uint8 __attribute__((overloadable)) add_sat(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) add_sat(int16 x, int16 y);
-uint16 __attribute__((overloadable)) add_sat(uint16 x, uint16 y);
-long __attribute__((overloadable)) add_sat(long x, long y);
-ulong __attribute__((overloadable)) add_sat(ulong x, ulong y);
-long2 __attribute__((overloadable)) add_sat(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) add_sat(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) add_sat(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) add_sat(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) add_sat(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) add_sat(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) add_sat(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) add_sat(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) add_sat(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) add_sat(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) add_sat(char x, char y);
+uchar const_func __attribute__((overloadable)) add_sat(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) add_sat(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) add_sat(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) add_sat(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) add_sat(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) add_sat(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) add_sat(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) add_sat(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) add_sat(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) add_sat(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) add_sat(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) add_sat(short x, short y);
+ushort const_func __attribute__((overloadable)) add_sat(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) add_sat(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) add_sat(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) add_sat(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) add_sat(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) add_sat(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) add_sat(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) add_sat(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) add_sat(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) add_sat(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) add_sat(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) add_sat(int x, int y);
+uint const_func __attribute__((overloadable)) add_sat(uint x, uint y);
+int2 const_func __attribute__((overloadable)) add_sat(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) add_sat(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) add_sat(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) add_sat(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) add_sat(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) add_sat(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) add_sat(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) add_sat(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) add_sat(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) add_sat(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) add_sat(long x, long y);
+ulong const_func __attribute__((overloadable)) add_sat(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) add_sat(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) add_sat(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) add_sat(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) add_sat(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) add_sat(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) add_sat(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) add_sat(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) add_sat(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) add_sat(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) add_sat(ulong16 x, ulong16 y);
 
 /**
  * Returns (x + y) >> 1. The intermediate sum does
  * not modulo overflow.
  */
-char __attribute__((overloadable)) hadd(char x, char y);
-uchar __attribute__((overloadable)) hadd(uchar x, uchar y);
-char2 __attribute__((overloadable)) hadd(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) hadd(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) hadd(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) hadd(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) hadd(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) hadd(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) hadd(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) hadd(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) hadd(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) hadd(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) hadd(short x, short y);
-ushort __attribute__((overloadable)) hadd(ushort x, ushort y);
-short2 __attribute__((overloadable)) hadd(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) hadd(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) hadd(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) hadd(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) hadd(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) hadd(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) hadd(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) hadd(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) hadd(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) hadd(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) hadd(int x, int y);
-uint __attribute__((overloadable)) hadd(uint x, uint y);
-int2 __attribute__((overloadable)) hadd(int2 x, int2 y);
-uint2 __attribute__((overloadable)) hadd(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) hadd(int3 x, int3 y);
-uint3 __attribute__((overloadable)) hadd(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) hadd(int4 x, int4 y);
-uint4 __attribute__((overloadable)) hadd(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) hadd(int8 x, int8 y);
-uint8 __attribute__((overloadable)) hadd(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) hadd(int16 x, int16 y);
-uint16 __attribute__((overloadable)) hadd(uint16 x, uint16 y);
-long __attribute__((overloadable)) hadd(long x, long y);
-ulong __attribute__((overloadable)) hadd(ulong x, ulong y);
-long2 __attribute__((overloadable)) hadd(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) hadd(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) hadd(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) hadd(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) hadd(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) hadd(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) hadd(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) hadd(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) hadd(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) hadd(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) hadd(char x, char y);
+uchar const_func __attribute__((overloadable)) hadd(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) hadd(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) hadd(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) hadd(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) hadd(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) hadd(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) hadd(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) hadd(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) hadd(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) hadd(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) hadd(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) hadd(short x, short y);
+ushort const_func __attribute__((overloadable)) hadd(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) hadd(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) hadd(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) hadd(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) hadd(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) hadd(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) hadd(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) hadd(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) hadd(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) hadd(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) hadd(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) hadd(int x, int y);
+uint const_func __attribute__((overloadable)) hadd(uint x, uint y);
+int2 const_func __attribute__((overloadable)) hadd(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) hadd(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) hadd(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) hadd(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) hadd(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) hadd(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) hadd(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) hadd(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) hadd(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) hadd(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) hadd(long x, long y);
+ulong const_func __attribute__((overloadable)) hadd(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) hadd(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) hadd(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) hadd(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) hadd(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) hadd(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) hadd(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) hadd(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) hadd(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) hadd(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) hadd(ulong16 x, ulong16 y);
 
 /**
  * Returns (x + y + 1) >> 1. The intermediate sum
  * does not modulo overflow.
  */
-char __attribute__((overloadable)) rhadd(char x, char y);
-uchar __attribute__((overloadable)) rhadd(uchar x, uchar y);
-char2 __attribute__((overloadable)) rhadd(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) rhadd(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) rhadd(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) rhadd(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) rhadd(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) rhadd(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) rhadd(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) rhadd(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) rhadd(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) rhadd(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) rhadd(short x, short y);
-ushort __attribute__((overloadable)) rhadd(ushort x, ushort y);
-short2 __attribute__((overloadable)) rhadd(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) rhadd(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) rhadd(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) rhadd(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) rhadd(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) rhadd(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) rhadd(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) rhadd(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) rhadd(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) rhadd(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) rhadd(int x, int y);
-uint __attribute__((overloadable)) rhadd(uint x, uint y);
-int2 __attribute__((overloadable)) rhadd(int2 x, int2 y);
-uint2 __attribute__((overloadable)) rhadd(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) rhadd(int3 x, int3 y);
-uint3 __attribute__((overloadable)) rhadd(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) rhadd(int4 x, int4 y);
-uint4 __attribute__((overloadable)) rhadd(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) rhadd(int8 x, int8 y);
-uint8 __attribute__((overloadable)) rhadd(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) rhadd(int16 x, int16 y);
-uint16 __attribute__((overloadable)) rhadd(uint16 x, uint16 y);
-long __attribute__((overloadable)) rhadd(long x, long y);
-ulong __attribute__((overloadable)) rhadd(ulong x, ulong y);
-long2 __attribute__((overloadable)) rhadd(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) rhadd(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) rhadd(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) rhadd(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) rhadd(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) rhadd(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) rhadd(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) rhadd(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) rhadd(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) rhadd(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) rhadd(char x, char y);
+uchar const_func __attribute__((overloadable)) rhadd(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) rhadd(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) rhadd(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) rhadd(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) rhadd(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) rhadd(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) rhadd(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) rhadd(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) rhadd(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) rhadd(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) rhadd(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) rhadd(short x, short y);
+ushort const_func __attribute__((overloadable)) rhadd(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) rhadd(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) rhadd(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) rhadd(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) rhadd(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) rhadd(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) rhadd(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) rhadd(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) rhadd(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) rhadd(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) rhadd(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) rhadd(int x, int y);
+uint const_func __attribute__((overloadable)) rhadd(uint x, uint y);
+int2 const_func __attribute__((overloadable)) rhadd(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) rhadd(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) rhadd(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) rhadd(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) rhadd(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) rhadd(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) rhadd(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) rhadd(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) rhadd(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) rhadd(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) rhadd(long x, long y);
+ulong const_func __attribute__((overloadable)) rhadd(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) rhadd(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) rhadd(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) rhadd(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) rhadd(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) rhadd(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) rhadd(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) rhadd(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) rhadd(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) rhadd(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) rhadd(ulong16 x, ulong16 y);
 
 /**
  * Returns min(max(x, minval), maxval).
  * Results are undefined if minval > maxval.
  */
-char __attribute__((overloadable)) clamp(char x, char minval, char maxval);
-uchar __attribute__((overloadable)) clamp(uchar x, uchar minval, uchar maxval);
-char2 __attribute__((overloadable)) clamp(char2 x, char2 minval, char2 maxval);
-uchar2 __attribute__((overloadable)) clamp(uchar2 x, uchar2 minval, uchar2 maxval);
-char3 __attribute__((overloadable)) clamp(char3 x, char3 minval, char3 maxval);
-uchar3 __attribute__((overloadable)) clamp(uchar3 x, uchar3 minval, uchar3 maxval);
-char4 __attribute__((overloadable)) clamp(char4 x, char4 minval, char4 maxval);
-uchar4 __attribute__((overloadable)) clamp(uchar4 x, uchar4 minval, uchar4 maxval);
-char8 __attribute__((overloadable)) clamp(char8 x, char8 minval, char8 maxval);
-uchar8 __attribute__((overloadable)) clamp(uchar8 x, uchar8 minval, uchar8 maxval);
-char16 __attribute__((overloadable)) clamp(char16 x, char16 minval, char16 maxval);
-uchar16 __attribute__((overloadable)) clamp(uchar16 x, uchar16 minval, uchar16 maxval);
-short __attribute__((overloadable)) clamp(short x, short minval, short maxval);
-ushort __attribute__((overloadable)) clamp(ushort x, ushort minval, ushort maxval);
-short2 __attribute__((overloadable)) clamp(short2 x, short2 minval, short2 maxval);
-ushort2 __attribute__((overloadable)) clamp(ushort2 x, ushort2 minval, ushort2 maxval);
-short3 __attribute__((overloadable)) clamp(short3 x, short3 minval, short3 maxval);
-ushort3 __attribute__((overloadable)) clamp(ushort3 x, ushort3 minval, ushort3 maxval);
-short4 __attribute__((overloadable)) clamp(short4 x, short4 minval, short4 maxval);
-ushort4 __attribute__((overloadable)) clamp(ushort4 x, ushort4 minval, ushort4 maxval);
-short8 __attribute__((overloadable)) clamp(short8 x, short8 minval, short8 maxval);
-ushort8 __attribute__((overloadable)) clamp(ushort8 x, ushort8 minval, ushort8 maxval);
-short16 __attribute__((overloadable)) clamp(short16 x, short16 minval, short16 maxval);
-ushort16 __attribute__((overloadable)) clamp(ushort16 x, ushort16 minval, ushort16 maxval);
-int __attribute__((overloadable)) clamp(int x, int minval, int maxval);
-uint __attribute__((overloadable)) clamp(uint x, uint minval, uint maxval);
-int2 __attribute__((overloadable)) clamp(int2 x, int2 minval, int2 maxval);
-uint2 __attribute__((overloadable)) clamp(uint2 x, uint2 minval, uint2 maxval);
-int3 __attribute__((overloadable)) clamp(int3 x, int3 minval, int3 maxval);
-uint3 __attribute__((overloadable)) clamp(uint3 x, uint3 minval, uint3 maxval);
-int4 __attribute__((overloadable)) clamp(int4 x, int4 minval, int4 maxval);
-uint4 __attribute__((overloadable)) clamp(uint4 x, uint4 minval, uint4 maxval);
-int8 __attribute__((overloadable)) clamp(int8 x, int8 minval, int8 maxval);
-uint8 __attribute__((overloadable)) clamp(uint8 x, uint8 minval, uint8 maxval);
-int16 __attribute__((overloadable)) clamp(int16 x, int16 minval, int16 maxval);
-uint16 __attribute__((overloadable)) clamp(uint16 x, uint16 minval, uint16 maxval);
-long __attribute__((overloadable)) clamp(long x, long minval, long maxval);
-ulong __attribute__((overloadable)) clamp(ulong x, ulong minval, ulong maxval);
-long2 __attribute__((overloadable)) clamp(long2 x, long2 minval, long2 maxval);
-ulong2 __attribute__((overloadable)) clamp(ulong2 x, ulong2 minval, ulong2 maxval);
-long3 __attribute__((overloadable)) clamp(long3 x, long3 minval, long3 maxval);
-ulong3 __attribute__((overloadable)) clamp(ulong3 x, ulong3 minval, ulong3 maxval);
-long4 __attribute__((overloadable)) clamp(long4 x, long4 minval, long4 maxval);
-ulong4 __attribute__((overloadable)) clamp(ulong4 x, ulong4 minval, ulong4 maxval);
-long8 __attribute__((overloadable)) clamp(long8 x, long8 minval, long8 maxval);
-ulong8 __attribute__((overloadable)) clamp(ulong8 x, ulong8 minval, ulong8 maxval);
-long16 __attribute__((overloadable)) clamp(long16 x, long16 minval, long16 maxval);
-ulong16 __attribute__((overloadable)) clamp(ulong16 x, ulong16 minval, ulong16 maxval);
-char __attribute__((overloadable)) clamp(char x, char minval, char maxval);
-uchar __attribute__((overloadable)) clamp(uchar x, uchar minval, uchar maxval);
-char2 __attribute__((overloadable)) clamp(char2 x, char minval, char maxval);
-uchar2 __attribute__((overloadable)) clamp(uchar2 x, uchar minval, uchar maxval);
-char3 __attribute__((overloadable)) clamp(char3 x, char minval, char maxval);
-uchar3 __attribute__((overloadable)) clamp(uchar3 x, uchar minval, uchar maxval);
-char4 __attribute__((overloadable)) clamp(char4 x, char minval, char maxval);
-uchar4 __attribute__((overloadable)) clamp(uchar4 x, uchar minval, uchar maxval);
-char8 __attribute__((overloadable)) clamp(char8 x, char minval, char maxval);
-uchar8 __attribute__((overloadable)) clamp(uchar8 x, uchar minval, uchar maxval);
-char16 __attribute__((overloadable)) clamp(char16 x, char minval, char maxval);
-uchar16 __attribute__((overloadable)) clamp(uchar16 x, uchar minval, uchar maxval);
-short __attribute__((overloadable)) clamp(short x, short minval, short maxval);
-ushort __attribute__((overloadable)) clamp(ushort x, ushort minval, ushort maxval);
-short2 __attribute__((overloadable)) clamp(short2 x, short minval, short maxval);
-ushort2 __attribute__((overloadable)) clamp(ushort2 x, ushort minval, ushort maxval);
-short3 __attribute__((overloadable)) clamp(short3 x, short minval, short maxval);
-ushort3 __attribute__((overloadable)) clamp(ushort3 x, ushort minval, ushort maxval);
-short4 __attribute__((overloadable)) clamp(short4 x, short minval, short maxval);
-ushort4 __attribute__((overloadable)) clamp(ushort4 x, ushort minval, ushort maxval);
-short8 __attribute__((overloadable)) clamp(short8 x, short minval, short maxval);
-ushort8 __attribute__((overloadable)) clamp(ushort8 x, ushort minval, ushort maxval);
-short16 __attribute__((overloadable)) clamp(short16 x, short minval, short maxval);
-ushort16 __attribute__((overloadable)) clamp(ushort16 x, ushort minval, ushort maxval);
-int __attribute__((overloadable)) clamp(int x, int minval, int maxval);
-uint __attribute__((overloadable)) clamp(uint x, uint minval, uint maxval);
-int2 __attribute__((overloadable)) clamp(int2 x, int minval, int maxval);
-uint2 __attribute__((overloadable)) clamp(uint2 x, uint minval, uint maxval);
-int3 __attribute__((overloadable)) clamp(int3 x, int minval, int maxval);
-uint3 __attribute__((overloadable)) clamp(uint3 x, uint minval, uint maxval);
-int4 __attribute__((overloadable)) clamp(int4 x, int minval, int maxval);
-uint4 __attribute__((overloadable)) clamp(uint4 x, uint minval, uint maxval);
-int8 __attribute__((overloadable)) clamp(int8 x, int minval, int maxval);
-uint8 __attribute__((overloadable)) clamp(uint8 x, uint minval, uint maxval);
-int16 __attribute__((overloadable)) clamp(int16 x, int minval, int maxval);
-uint16 __attribute__((overloadable)) clamp(uint16 x, uint minval, uint maxval);
-long __attribute__((overloadable)) clamp(long x, long minval, long maxval);
-ulong __attribute__((overloadable)) clamp(ulong x, ulong minval, ulong maxval);
-long2 __attribute__((overloadable)) clamp(long2 x, long minval, long maxval);
-ulong2 __attribute__((overloadable)) clamp(ulong2 x, ulong minval, ulong maxval);
-long3 __attribute__((overloadable)) clamp(long3 x, long minval, long maxval);
-ulong3 __attribute__((overloadable)) clamp(ulong3 x, ulong minval, ulong maxval);
-long4 __attribute__((overloadable)) clamp(long4 x, long minval, long maxval);
-ulong4 __attribute__((overloadable)) clamp(ulong4 x, ulong minval, ulong maxval);
-long8 __attribute__((overloadable)) clamp(long8 x, long minval, long maxval);
-ulong8 __attribute__((overloadable)) clamp(ulong8 x, ulong minval, ulong maxval);
-long16 __attribute__((overloadable)) clamp(long16 x, long minval, long maxval);
-ulong16 __attribute__((overloadable)) clamp(ulong16 x, ulong minval, ulong maxval);
+char const_func __attribute__((overloadable)) clamp(char x, char minval, char maxval);
+uchar const_func __attribute__((overloadable)) clamp(uchar x, uchar minval, uchar maxval);
+char2 const_func __attribute__((overloadable)) clamp(char2 x, char2 minval, char2 maxval);
+uchar2 const_func __attribute__((overloadable)) clamp(uchar2 x, uchar2 minval, uchar2 maxval);
+char3 const_func __attribute__((overloadable)) clamp(char3 x, char3 minval, char3 maxval);
+uchar3 const_func __attribute__((overloadable)) clamp(uchar3 x, uchar3 minval, uchar3 maxval);
+char4 const_func __attribute__((overloadable)) clamp(char4 x, char4 minval, char4 maxval);
+uchar4 const_func __attribute__((overloadable)) clamp(uchar4 x, uchar4 minval, uchar4 maxval);
+char8 const_func __attribute__((overloadable)) clamp(char8 x, char8 minval, char8 maxval);
+uchar8 const_func __attribute__((overloadable)) clamp(uchar8 x, uchar8 minval, uchar8 maxval);
+char16 const_func __attribute__((overloadable)) clamp(char16 x, char16 minval, char16 maxval);
+uchar16 const_func __attribute__((overloadable)) clamp(uchar16 x, uchar16 minval, uchar16 maxval);
+short const_func __attribute__((overloadable)) clamp(short x, short minval, short maxval);
+ushort const_func __attribute__((overloadable)) clamp(ushort x, ushort minval, ushort maxval);
+short2 const_func __attribute__((overloadable)) clamp(short2 x, short2 minval, short2 maxval);
+ushort2 const_func __attribute__((overloadable)) clamp(ushort2 x, ushort2 minval, ushort2 maxval);
+short3 const_func __attribute__((overloadable)) clamp(short3 x, short3 minval, short3 maxval);
+ushort3 const_func __attribute__((overloadable)) clamp(ushort3 x, ushort3 minval, ushort3 maxval);
+short4 const_func __attribute__((overloadable)) clamp(short4 x, short4 minval, short4 maxval);
+ushort4 const_func __attribute__((overloadable)) clamp(ushort4 x, ushort4 minval, ushort4 maxval);
+short8 const_func __attribute__((overloadable)) clamp(short8 x, short8 minval, short8 maxval);
+ushort8 const_func __attribute__((overloadable)) clamp(ushort8 x, ushort8 minval, ushort8 maxval);
+short16 const_func __attribute__((overloadable)) clamp(short16 x, short16 minval, short16 maxval);
+ushort16 const_func __attribute__((overloadable)) clamp(ushort16 x, ushort16 minval, ushort16 maxval);
+int const_func __attribute__((overloadable)) clamp(int x, int minval, int maxval);
+uint const_func __attribute__((overloadable)) clamp(uint x, uint minval, uint maxval);
+int2 const_func __attribute__((overloadable)) clamp(int2 x, int2 minval, int2 maxval);
+uint2 const_func __attribute__((overloadable)) clamp(uint2 x, uint2 minval, uint2 maxval);
+int3 const_func __attribute__((overloadable)) clamp(int3 x, int3 minval, int3 maxval);
+uint3 const_func __attribute__((overloadable)) clamp(uint3 x, uint3 minval, uint3 maxval);
+int4 const_func __attribute__((overloadable)) clamp(int4 x, int4 minval, int4 maxval);
+uint4 const_func __attribute__((overloadable)) clamp(uint4 x, uint4 minval, uint4 maxval);
+int8 const_func __attribute__((overloadable)) clamp(int8 x, int8 minval, int8 maxval);
+uint8 const_func __attribute__((overloadable)) clamp(uint8 x, uint8 minval, uint8 maxval);
+int16 const_func __attribute__((overloadable)) clamp(int16 x, int16 minval, int16 maxval);
+uint16 const_func __attribute__((overloadable)) clamp(uint16 x, uint16 minval, uint16 maxval);
+long const_func __attribute__((overloadable)) clamp(long x, long minval, long maxval);
+ulong const_func __attribute__((overloadable)) clamp(ulong x, ulong minval, ulong maxval);
+long2 const_func __attribute__((overloadable)) clamp(long2 x, long2 minval, long2 maxval);
+ulong2 const_func __attribute__((overloadable)) clamp(ulong2 x, ulong2 minval, ulong2 maxval);
+long3 const_func __attribute__((overloadable)) clamp(long3 x, long3 minval, long3 maxval);
+ulong3 const_func __attribute__((overloadable)) clamp(ulong3 x, ulong3 minval, ulong3 maxval);
+long4 const_func __attribute__((overloadable)) clamp(long4 x, long4 minval, long4 maxval);
+ulong4 const_func __attribute__((overloadable)) clamp(ulong4 x, ulong4 minval, ulong4 maxval);
+long8 const_func __attribute__((overloadable)) clamp(long8 x, long8 minval, long8 maxval);
+ulong8 const_func __attribute__((overloadable)) clamp(ulong8 x, ulong8 minval, ulong8 maxval);
+long16 const_func __attribute__((overloadable)) clamp(long16 x, long16 minval, long16 maxval);
+ulong16 const_func __attribute__((overloadable)) clamp(ulong16 x, ulong16 minval, ulong16 maxval);
+char const_func __attribute__((overloadable)) clamp(char x, char minval, char maxval);
+uchar const_func __attribute__((overloadable)) clamp(uchar x, uchar minval, uchar maxval);
+char2 const_func __attribute__((overloadable)) clamp(char2 x, char minval, char maxval);
+uchar2 const_func __attribute__((overloadable)) clamp(uchar2 x, uchar minval, uchar maxval);
+char3 const_func __attribute__((overloadable)) clamp(char3 x, char minval, char maxval);
+uchar3 const_func __attribute__((overloadable)) clamp(uchar3 x, uchar minval, uchar maxval);
+char4 const_func __attribute__((overloadable)) clamp(char4 x, char minval, char maxval);
+uchar4 const_func __attribute__((overloadable)) clamp(uchar4 x, uchar minval, uchar maxval);
+char8 const_func __attribute__((overloadable)) clamp(char8 x, char minval, char maxval);
+uchar8 const_func __attribute__((overloadable)) clamp(uchar8 x, uchar minval, uchar maxval);
+char16 const_func __attribute__((overloadable)) clamp(char16 x, char minval, char maxval);
+uchar16 const_func __attribute__((overloadable)) clamp(uchar16 x, uchar minval, uchar maxval);
+short const_func __attribute__((overloadable)) clamp(short x, short minval, short maxval);
+ushort const_func __attribute__((overloadable)) clamp(ushort x, ushort minval, ushort maxval);
+short2 const_func __attribute__((overloadable)) clamp(short2 x, short minval, short maxval);
+ushort2 const_func __attribute__((overloadable)) clamp(ushort2 x, ushort minval, ushort maxval);
+short3 const_func __attribute__((overloadable)) clamp(short3 x, short minval, short maxval);
+ushort3 const_func __attribute__((overloadable)) clamp(ushort3 x, ushort minval, ushort maxval);
+short4 const_func __attribute__((overloadable)) clamp(short4 x, short minval, short maxval);
+ushort4 const_func __attribute__((overloadable)) clamp(ushort4 x, ushort minval, ushort maxval);
+short8 const_func __attribute__((overloadable)) clamp(short8 x, short minval, short maxval);
+ushort8 const_func __attribute__((overloadable)) clamp(ushort8 x, ushort minval, ushort maxval);
+short16 const_func __attribute__((overloadable)) clamp(short16 x, short minval, short maxval);
+ushort16 const_func __attribute__((overloadable)) clamp(ushort16 x, ushort minval, ushort maxval);
+int const_func __attribute__((overloadable)) clamp(int x, int minval, int maxval);
+uint const_func __attribute__((overloadable)) clamp(uint x, uint minval, uint maxval);
+int2 const_func __attribute__((overloadable)) clamp(int2 x, int minval, int maxval);
+uint2 const_func __attribute__((overloadable)) clamp(uint2 x, uint minval, uint maxval);
+int3 const_func __attribute__((overloadable)) clamp(int3 x, int minval, int maxval);
+uint3 const_func __attribute__((overloadable)) clamp(uint3 x, uint minval, uint maxval);
+int4 const_func __attribute__((overloadable)) clamp(int4 x, int minval, int maxval);
+uint4 const_func __attribute__((overloadable)) clamp(uint4 x, uint minval, uint maxval);
+int8 const_func __attribute__((overloadable)) clamp(int8 x, int minval, int maxval);
+uint8 const_func __attribute__((overloadable)) clamp(uint8 x, uint minval, uint maxval);
+int16 const_func __attribute__((overloadable)) clamp(int16 x, int minval, int maxval);
+uint16 const_func __attribute__((overloadable)) clamp(uint16 x, uint minval, uint maxval);
+long const_func __attribute__((overloadable)) clamp(long x, long minval, long maxval);
+ulong const_func __attribute__((overloadable)) clamp(ulong x, ulong minval, ulong maxval);
+long2 const_func __attribute__((overloadable)) clamp(long2 x, long minval, long maxval);
+ulong2 const_func __attribute__((overloadable)) clamp(ulong2 x, ulong minval, ulong maxval);
+long3 const_func __attribute__((overloadable)) clamp(long3 x, long minval, long maxval);
+ulong3 const_func __attribute__((overloadable)) clamp(ulong3 x, ulong minval, ulong maxval);
+long4 const_func __attribute__((overloadable)) clamp(long4 x, long minval, long maxval);
+ulong4 const_func __attribute__((overloadable)) clamp(ulong4 x, ulong minval, ulong maxval);
+long8 const_func __attribute__((overloadable)) clamp(long8 x, long minval, long maxval);
+ulong8 const_func __attribute__((overloadable)) clamp(ulong8 x, ulong minval, ulong maxval);
+long16 const_func __attribute__((overloadable)) clamp(long16 x, long minval, long maxval);
+ulong16 const_func __attribute__((overloadable)) clamp(ulong16 x, ulong minval, ulong maxval);
 
 /**
  * Returns the number of leading 0-bits in x, starting
  * at the most significant bit position.
  */
-char __attribute__((overloadable)) clz(char x);
-uchar __attribute__((overloadable)) clz(uchar x);
-char2 __attribute__((overloadable)) clz(char2 x);
-uchar2 __attribute__((overloadable)) clz(uchar2 x);
-char3 __attribute__((overloadable)) clz(char3 x);
-uchar3 __attribute__((overloadable)) clz(uchar3 x);
-char4 __attribute__((overloadable)) clz(char4 x);
-uchar4 __attribute__((overloadable)) clz(uchar4 x);
-char8 __attribute__((overloadable)) clz(char8 x);
-uchar8 __attribute__((overloadable)) clz(uchar8 x);
-char16 __attribute__((overloadable)) clz(char16 x);
-uchar16 __attribute__((overloadable)) clz(uchar16 x);
-short __attribute__((overloadable)) clz(short x);
-ushort __attribute__((overloadable)) clz(ushort x);
-short2 __attribute__((overloadable)) clz(short2 x);
-ushort2 __attribute__((overloadable)) clz(ushort2 x);
-short3 __attribute__((overloadable)) clz(short3 x);
-ushort3 __attribute__((overloadable)) clz(ushort3 x);
-short4 __attribute__((overloadable)) clz(short4 x);
-ushort4 __attribute__((overloadable)) clz(ushort4 x);
-short8 __attribute__((overloadable)) clz(short8 x);
-ushort8 __attribute__((overloadable)) clz(ushort8 x);
-short16 __attribute__((overloadable)) clz(short16 x);
-ushort16 __attribute__((overloadable)) clz(ushort16 x);
-int __attribute__((overloadable)) clz(int x);
-uint __attribute__((overloadable)) clz(uint x);
-int2 __attribute__((overloadable)) clz(int2 x);
-uint2 __attribute__((overloadable)) clz(uint2 x);
-int3 __attribute__((overloadable)) clz(int3 x);
-uint3 __attribute__((overloadable)) clz(uint3 x);
-int4 __attribute__((overloadable)) clz(int4 x);
-uint4 __attribute__((overloadable)) clz(uint4 x);
-int8 __attribute__((overloadable)) clz(int8 x);
-uint8 __attribute__((overloadable)) clz(uint8 x);
-int16 __attribute__((overloadable)) clz(int16 x);
-uint16 __attribute__((overloadable)) clz(uint16 x);
-long __attribute__((overloadable)) clz(long x);
-ulong __attribute__((overloadable)) clz(ulong x);
-long2 __attribute__((overloadable)) clz(long2 x);
-ulong2 __attribute__((overloadable)) clz(ulong2 x);
-long3 __attribute__((overloadable)) clz(long3 x);
-ulong3 __attribute__((overloadable)) clz(ulong3 x);
-long4 __attribute__((overloadable)) clz(long4 x);
-ulong4 __attribute__((overloadable)) clz(ulong4 x);
-long8 __attribute__((overloadable)) clz(long8 x);
-ulong8 __attribute__((overloadable)) clz(ulong8 x);
-long16 __attribute__((overloadable)) clz(long16 x);
-ulong16 __attribute__((overloadable)) clz(ulong16 x);
+char const_func __attribute__((overloadable)) clz(char x);
+uchar const_func __attribute__((overloadable)) clz(uchar x);
+char2 const_func __attribute__((overloadable)) clz(char2 x);
+uchar2 const_func __attribute__((overloadable)) clz(uchar2 x);
+char3 const_func __attribute__((overloadable)) clz(char3 x);
+uchar3 const_func __attribute__((overloadable)) clz(uchar3 x);
+char4 const_func __attribute__((overloadable)) clz(char4 x);
+uchar4 const_func __attribute__((overloadable)) clz(uchar4 x);
+char8 const_func __attribute__((overloadable)) clz(char8 x);
+uchar8 const_func __attribute__((overloadable)) clz(uchar8 x);
+char16 const_func __attribute__((overloadable)) clz(char16 x);
+uchar16 const_func __attribute__((overloadable)) clz(uchar16 x);
+short const_func __attribute__((overloadable)) clz(short x);
+ushort const_func __attribute__((overloadable)) clz(ushort x);
+short2 const_func __attribute__((overloadable)) clz(short2 x);
+ushort2 const_func __attribute__((overloadable)) clz(ushort2 x);
+short3 const_func __attribute__((overloadable)) clz(short3 x);
+ushort3 const_func __attribute__((overloadable)) clz(ushort3 x);
+short4 const_func __attribute__((overloadable)) clz(short4 x);
+ushort4 const_func __attribute__((overloadable)) clz(ushort4 x);
+short8 const_func __attribute__((overloadable)) clz(short8 x);
+ushort8 const_func __attribute__((overloadable)) clz(ushort8 x);
+short16 const_func __attribute__((overloadable)) clz(short16 x);
+ushort16 const_func __attribute__((overloadable)) clz(ushort16 x);
+int const_func __attribute__((overloadable)) clz(int x);
+uint const_func __attribute__((overloadable)) clz(uint x);
+int2 const_func __attribute__((overloadable)) clz(int2 x);
+uint2 const_func __attribute__((overloadable)) clz(uint2 x);
+int3 const_func __attribute__((overloadable)) clz(int3 x);
+uint3 const_func __attribute__((overloadable)) clz(uint3 x);
+int4 const_func __attribute__((overloadable)) clz(int4 x);
+uint4 const_func __attribute__((overloadable)) clz(uint4 x);
+int8 const_func __attribute__((overloadable)) clz(int8 x);
+uint8 const_func __attribute__((overloadable)) clz(uint8 x);
+int16 const_func __attribute__((overloadable)) clz(int16 x);
+uint16 const_func __attribute__((overloadable)) clz(uint16 x);
+long const_func __attribute__((overloadable)) clz(long x);
+ulong const_func __attribute__((overloadable)) clz(ulong x);
+long2 const_func __attribute__((overloadable)) clz(long2 x);
+ulong2 const_func __attribute__((overloadable)) clz(ulong2 x);
+long3 const_func __attribute__((overloadable)) clz(long3 x);
+ulong3 const_func __attribute__((overloadable)) clz(ulong3 x);
+long4 const_func __attribute__((overloadable)) clz(long4 x);
+ulong4 const_func __attribute__((overloadable)) clz(ulong4 x);
+long8 const_func __attribute__((overloadable)) clz(long8 x);
+ulong8 const_func __attribute__((overloadable)) clz(ulong8 x);
+long16 const_func __attribute__((overloadable)) clz(long16 x);
+ulong16 const_func __attribute__((overloadable)) clz(ulong16 x);
 
 /**
  * Returns mul_hi(a, b) + c.
  */
-char __attribute__((overloadable)) mad_hi(char a, char b, char c);
-uchar __attribute__((overloadable)) mad_hi(uchar a, uchar b, uchar c);
-char2 __attribute__((overloadable)) mad_hi(char2 a, char2 b, char2 c);
-uchar2 __attribute__((overloadable)) mad_hi(uchar2 a, uchar2 b, uchar2 c);
-char3 __attribute__((overloadable)) mad_hi(char3 a, char3 b, char3 c);
-uchar3 __attribute__((overloadable)) mad_hi(uchar3 a, uchar3 b, uchar3 c);
-char4 __attribute__((overloadable)) mad_hi(char4 a, char4 b, char4 c);
-uchar4 __attribute__((overloadable)) mad_hi(uchar4 a, uchar4 b, uchar4 c);
-char8 __attribute__((overloadable)) mad_hi(char8 a, char8 b, char8 c);
-uchar8 __attribute__((overloadable)) mad_hi(uchar8 a, uchar8 b, uchar8 c);
-char16 __attribute__((overloadable)) mad_hi(char16 a, char16 b, char16 c);
-uchar16 __attribute__((overloadable)) mad_hi(uchar16 a, uchar16 b, uchar16 c);
-short __attribute__((overloadable)) mad_hi(short a, short b, short c);
-ushort __attribute__((overloadable)) mad_hi(ushort a, ushort b, ushort c);
-short2 __attribute__((overloadable)) mad_hi(short2 a, short2 b, short2 c);
-ushort2 __attribute__((overloadable)) mad_hi(ushort2 a, ushort2 b, ushort2 c);
-short3 __attribute__((overloadable)) mad_hi(short3 a, short3 b, short3 c);
-ushort3 __attribute__((overloadable)) mad_hi(ushort3 a, ushort3 b, ushort3 c);
-short4 __attribute__((overloadable)) mad_hi(short4 a, short4 b, short4 c);
-ushort4 __attribute__((overloadable)) mad_hi(ushort4 a, ushort4 b, ushort4 c);
-short8 __attribute__((overloadable)) mad_hi(short8 a, short8 b, short8 c);
-ushort8 __attribute__((overloadable)) mad_hi(ushort8 a, ushort8 b, ushort8 c);
-short16 __attribute__((overloadable)) mad_hi(short16 a, short16 b, short16 c);
-ushort16 __attribute__((overloadable)) mad_hi(ushort16 a, ushort16 b, ushort16 c);
-int __attribute__((overloadable)) mad_hi(int a, int b, int c);
-uint __attribute__((overloadable)) mad_hi(uint a, uint b, uint c);
-int2 __attribute__((overloadable)) mad_hi(int2 a, int2 b, int2 c);
-uint2 __attribute__((overloadable)) mad_hi(uint2 a, uint2 b, uint2 c);
-int3 __attribute__((overloadable)) mad_hi(int3 a, int3 b, int3 c);
-uint3 __attribute__((overloadable)) mad_hi(uint3 a, uint3 b, uint3 c);
-int4 __attribute__((overloadable)) mad_hi(int4 a, int4 b, int4 c);
-uint4 __attribute__((overloadable)) mad_hi(uint4 a, uint4 b, uint4 c);
-int8 __attribute__((overloadable)) mad_hi(int8 a, int8 b, int8 c);
-uint8 __attribute__((overloadable)) mad_hi(uint8 a, uint8 b, uint8 c);
-int16 __attribute__((overloadable)) mad_hi(int16 a, int16 b, int16 c);
-uint16 __attribute__((overloadable)) mad_hi(uint16 a, uint16 b, uint16 c);
-long __attribute__((overloadable)) mad_hi(long a, long b, long c);
-ulong __attribute__((overloadable)) mad_hi(ulong a, ulong b, ulong c);
-long2 __attribute__((overloadable)) mad_hi(long2 a, long2 b, long2 c);
-ulong2 __attribute__((overloadable)) mad_hi(ulong2 a, ulong2 b, ulong2 c);
-long3 __attribute__((overloadable)) mad_hi(long3 a, long3 b, long3 c);
-ulong3 __attribute__((overloadable)) mad_hi(ulong3 a, ulong3 b, ulong3 c);
-long4 __attribute__((overloadable)) mad_hi(long4 a, long4 b, long4 c);
-ulong4 __attribute__((overloadable)) mad_hi(ulong4 a, ulong4 b, ulong4 c);
-long8 __attribute__((overloadable)) mad_hi(long8 a, long8 b, long8 c);
-ulong8 __attribute__((overloadable)) mad_hi(ulong8 a, ulong8 b, ulong8 c);
-long16 __attribute__((overloadable)) mad_hi(long16 a, long16 b, long16 c);
-ulong16 __attribute__((overloadable)) mad_hi(ulong16 a, ulong16 b, ulong16 c);
+char const_func __attribute__((overloadable)) mad_hi(char a, char b, char c);
+uchar const_func __attribute__((overloadable)) mad_hi(uchar a, uchar b, uchar c);
+char2 const_func __attribute__((overloadable)) mad_hi(char2 a, char2 b, char2 c);
+uchar2 const_func __attribute__((overloadable)) mad_hi(uchar2 a, uchar2 b, uchar2 c);
+char3 const_func __attribute__((overloadable)) mad_hi(char3 a, char3 b, char3 c);
+uchar3 const_func __attribute__((overloadable)) mad_hi(uchar3 a, uchar3 b, uchar3 c);
+char4 const_func __attribute__((overloadable)) mad_hi(char4 a, char4 b, char4 c);
+uchar4 const_func __attribute__((overloadable)) mad_hi(uchar4 a, uchar4 b, uchar4 c);
+char8 const_func __attribute__((overloadable)) mad_hi(char8 a, char8 b, char8 c);
+uchar8 const_func __attribute__((overloadable)) mad_hi(uchar8 a, uchar8 b, uchar8 c);
+char16 const_func __attribute__((overloadable)) mad_hi(char16 a, char16 b, char16 c);
+uchar16 const_func __attribute__((overloadable)) mad_hi(uchar16 a, uchar16 b, uchar16 c);
+short const_func __attribute__((overloadable)) mad_hi(short a, short b, short c);
+ushort const_func __attribute__((overloadable)) mad_hi(ushort a, ushort b, ushort c);
+short2 const_func __attribute__((overloadable)) mad_hi(short2 a, short2 b, short2 c);
+ushort2 const_func __attribute__((overloadable)) mad_hi(ushort2 a, ushort2 b, ushort2 c);
+short3 const_func __attribute__((overloadable)) mad_hi(short3 a, short3 b, short3 c);
+ushort3 const_func __attribute__((overloadable)) mad_hi(ushort3 a, ushort3 b, ushort3 c);
+short4 const_func __attribute__((overloadable)) mad_hi(short4 a, short4 b, short4 c);
+ushort4 const_func __attribute__((overloadable)) mad_hi(ushort4 a, ushort4 b, ushort4 c);
+short8 const_func __attribute__((overloadable)) mad_hi(short8 a, short8 b, short8 c);
+ushort8 const_func __attribute__((overloadable)) mad_hi(ushort8 a, ushort8 b, ushort8 c);
+short16 const_func __attribute__((overloadable)) mad_hi(short16 a, short16 b, short16 c);
+ushort16 const_func __attribute__((overloadable)) mad_hi(ushort16 a, ushort16 b, ushort16 c);
+int const_func __attribute__((overloadable)) mad_hi(int a, int b, int c);
+uint const_func __attribute__((overloadable)) mad_hi(uint a, uint b, uint c);
+int2 const_func __attribute__((overloadable)) mad_hi(int2 a, int2 b, int2 c);
+uint2 const_func __attribute__((overloadable)) mad_hi(uint2 a, uint2 b, uint2 c);
+int3 const_func __attribute__((overloadable)) mad_hi(int3 a, int3 b, int3 c);
+uint3 const_func __attribute__((overloadable)) mad_hi(uint3 a, uint3 b, uint3 c);
+int4 const_func __attribute__((overloadable)) mad_hi(int4 a, int4 b, int4 c);
+uint4 const_func __attribute__((overloadable)) mad_hi(uint4 a, uint4 b, uint4 c);
+int8 const_func __attribute__((overloadable)) mad_hi(int8 a, int8 b, int8 c);
+uint8 const_func __attribute__((overloadable)) mad_hi(uint8 a, uint8 b, uint8 c);
+int16 const_func __attribute__((overloadable)) mad_hi(int16 a, int16 b, int16 c);
+uint16 const_func __attribute__((overloadable)) mad_hi(uint16 a, uint16 b, uint16 c);
+long const_func __attribute__((overloadable)) mad_hi(long a, long b, long c);
+ulong const_func __attribute__((overloadable)) mad_hi(ulong a, ulong b, ulong c);
+long2 const_func __attribute__((overloadable)) mad_hi(long2 a, long2 b, long2 c);
+ulong2 const_func __attribute__((overloadable)) mad_hi(ulong2 a, ulong2 b, ulong2 c);
+long3 const_func __attribute__((overloadable)) mad_hi(long3 a, long3 b, long3 c);
+ulong3 const_func __attribute__((overloadable)) mad_hi(ulong3 a, ulong3 b, ulong3 c);
+long4 const_func __attribute__((overloadable)) mad_hi(long4 a, long4 b, long4 c);
+ulong4 const_func __attribute__((overloadable)) mad_hi(ulong4 a, ulong4 b, ulong4 c);
+long8 const_func __attribute__((overloadable)) mad_hi(long8 a, long8 b, long8 c);
+ulong8 const_func __attribute__((overloadable)) mad_hi(ulong8 a, ulong8 b, ulong8 c);
+long16 const_func __attribute__((overloadable)) mad_hi(long16 a, long16 b, long16 c);
+ulong16 const_func __attribute__((overloadable)) mad_hi(ulong16 a, ulong16 b, ulong16 c);
 
 /**
  * Returns a * b + c and saturates the result.
  */
-char __attribute__((overloadable)) mad_sat(char a, char b, char c);
-uchar __attribute__((overloadable)) mad_sat(uchar a, uchar b, uchar c);
-char2 __attribute__((overloadable)) mad_sat(char2 a, char2 b, char2 c);
-uchar2 __attribute__((overloadable)) mad_sat(uchar2 a, uchar2 b, uchar2 c);
-char3 __attribute__((overloadable)) mad_sat(char3 a, char3 b, char3 c);
-uchar3 __attribute__((overloadable)) mad_sat(uchar3 a, uchar3 b, uchar3 c);
-char4 __attribute__((overloadable)) mad_sat(char4 a, char4 b, char4 c);
-uchar4 __attribute__((overloadable)) mad_sat(uchar4 a, uchar4 b, uchar4 c);
-char8 __attribute__((overloadable)) mad_sat(char8 a, char8 b, char8 c);
-uchar8 __attribute__((overloadable)) mad_sat(uchar8 a, uchar8 b, uchar8 c);
-char16 __attribute__((overloadable)) mad_sat(char16 a, char16 b, char16 c);
-uchar16 __attribute__((overloadable)) mad_sat(uchar16 a, uchar16 b, uchar16 c);
-short __attribute__((overloadable)) mad_sat(short a, short b, short c);
-ushort __attribute__((overloadable)) mad_sat(ushort a, ushort b, ushort c);
-short2 __attribute__((overloadable)) mad_sat(short2 a, short2 b, short2 c);
-ushort2 __attribute__((overloadable)) mad_sat(ushort2 a, ushort2 b, ushort2 c);
-short3 __attribute__((overloadable)) mad_sat(short3 a, short3 b, short3 c);
-ushort3 __attribute__((overloadable)) mad_sat(ushort3 a, ushort3 b, ushort3 c);
-short4 __attribute__((overloadable)) mad_sat(short4 a, short4 b, short4 c);
-ushort4 __attribute__((overloadable)) mad_sat(ushort4 a, ushort4 b, ushort4 c);
-short8 __attribute__((overloadable)) mad_sat(short8 a, short8 b, short8 c);
-ushort8 __attribute__((overloadable)) mad_sat(ushort8 a, ushort8 b, ushort8 c);
-short16 __attribute__((overloadable)) mad_sat(short16 a, short16 b, short16 c);
-ushort16 __attribute__((overloadable)) mad_sat(ushort16 a, ushort16 b, ushort16 c);
-int __attribute__((overloadable)) mad_sat(int a, int b, int c);
-uint __attribute__((overloadable)) mad_sat(uint a, uint b, uint c);
-int2 __attribute__((overloadable)) mad_sat(int2 a, int2 b, int2 c);
-uint2 __attribute__((overloadable)) mad_sat(uint2 a, uint2 b, uint2 c);
-int3 __attribute__((overloadable)) mad_sat(int3 a, int3 b, int3 c);
-uint3 __attribute__((overloadable)) mad_sat(uint3 a, uint3 b, uint3 c);
-int4 __attribute__((overloadable)) mad_sat(int4 a, int4 b, int4 c);
-uint4 __attribute__((overloadable)) mad_sat(uint4 a, uint4 b, uint4 c);
-int8 __attribute__((overloadable)) mad_sat(int8 a, int8 b, int8 c);
-uint8 __attribute__((overloadable)) mad_sat(uint8 a, uint8 b, uint8 c);
-int16 __attribute__((overloadable)) mad_sat(int16 a, int16 b, int16 c);
-uint16 __attribute__((overloadable)) mad_sat(uint16 a, uint16 b, uint16 c);
-long __attribute__((overloadable)) mad_sat(long a, long b, long c);
-ulong __attribute__((overloadable)) mad_sat(ulong a, ulong b, ulong c);
-long2 __attribute__((overloadable)) mad_sat(long2 a, long2 b, long2 c);
-ulong2 __attribute__((overloadable)) mad_sat(ulong2 a, ulong2 b, ulong2 c);
-long3 __attribute__((overloadable)) mad_sat(long3 a, long3 b, long3 c);
-ulong3 __attribute__((overloadable)) mad_sat(ulong3 a, ulong3 b, ulong3 c);
-long4 __attribute__((overloadable)) mad_sat(long4 a, long4 b, long4 c);
-ulong4 __attribute__((overloadable)) mad_sat(ulong4 a, ulong4 b, ulong4 c);
-long8 __attribute__((overloadable)) mad_sat(long8 a, long8 b, long8 c);
-ulong8 __attribute__((overloadable)) mad_sat(ulong8 a, ulong8 b, ulong8 c);
-long16 __attribute__((overloadable)) mad_sat(long16 a, long16 b, long16 c);
-ulong16 __attribute__((overloadable)) mad_sat(ulong16 a, ulong16 b, ulong16 c);
+char const_func __attribute__((overloadable)) mad_sat(char a, char b, char c);
+uchar const_func __attribute__((overloadable)) mad_sat(uchar a, uchar b, uchar c);
+char2 const_func __attribute__((overloadable)) mad_sat(char2 a, char2 b, char2 c);
+uchar2 const_func __attribute__((overloadable)) mad_sat(uchar2 a, uchar2 b, uchar2 c);
+char3 const_func __attribute__((overloadable)) mad_sat(char3 a, char3 b, char3 c);
+uchar3 const_func __attribute__((overloadable)) mad_sat(uchar3 a, uchar3 b, uchar3 c);
+char4 const_func __attribute__((overloadable)) mad_sat(char4 a, char4 b, char4 c);
+uchar4 const_func __attribute__((overloadable)) mad_sat(uchar4 a, uchar4 b, uchar4 c);
+char8 const_func __attribute__((overloadable)) mad_sat(char8 a, char8 b, char8 c);
+uchar8 const_func __attribute__((overloadable)) mad_sat(uchar8 a, uchar8 b, uchar8 c);
+char16 const_func __attribute__((overloadable)) mad_sat(char16 a, char16 b, char16 c);
+uchar16 const_func __attribute__((overloadable)) mad_sat(uchar16 a, uchar16 b, uchar16 c);
+short const_func __attribute__((overloadable)) mad_sat(short a, short b, short c);
+ushort const_func __attribute__((overloadable)) mad_sat(ushort a, ushort b, ushort c);
+short2 const_func __attribute__((overloadable)) mad_sat(short2 a, short2 b, short2 c);
+ushort2 const_func __attribute__((overloadable)) mad_sat(ushort2 a, ushort2 b, ushort2 c);
+short3 const_func __attribute__((overloadable)) mad_sat(short3 a, short3 b, short3 c);
+ushort3 const_func __attribute__((overloadable)) mad_sat(ushort3 a, ushort3 b, ushort3 c);
+short4 const_func __attribute__((overloadable)) mad_sat(short4 a, short4 b, short4 c);
+ushort4 const_func __attribute__((overloadable)) mad_sat(ushort4 a, ushort4 b, ushort4 c);
+short8 const_func __attribute__((overloadable)) mad_sat(short8 a, short8 b, short8 c);
+ushort8 const_func __attribute__((overloadable)) mad_sat(ushort8 a, ushort8 b, ushort8 c);
+short16 const_func __attribute__((overloadable)) mad_sat(short16 a, short16 b, short16 c);
+ushort16 const_func __attribute__((overloadable)) mad_sat(ushort16 a, ushort16 b, ushort16 c);
+int const_func __attribute__((overloadable)) mad_sat(int a, int b, int c);
+uint const_func __attribute__((overloadable)) mad_sat(uint a, uint b, uint c);
+int2 const_func __attribute__((overloadable)) mad_sat(int2 a, int2 b, int2 c);
+uint2 const_func __attribute__((overloadable)) mad_sat(uint2 a, uint2 b, uint2 c);
+int3 const_func __attribute__((overloadable)) mad_sat(int3 a, int3 b, int3 c);
+uint3 const_func __attribute__((overloadable)) mad_sat(uint3 a, uint3 b, uint3 c);
+int4 const_func __attribute__((overloadable)) mad_sat(int4 a, int4 b, int4 c);
+uint4 const_func __attribute__((overloadable)) mad_sat(uint4 a, uint4 b, uint4 c);
+int8 const_func __attribute__((overloadable)) mad_sat(int8 a, int8 b, int8 c);
+uint8 const_func __attribute__((overloadable)) mad_sat(uint8 a, uint8 b, uint8 c);
+int16 const_func __attribute__((overloadable)) mad_sat(int16 a, int16 b, int16 c);
+uint16 const_func __attribute__((overloadable)) mad_sat(uint16 a, uint16 b, uint16 c);
+long const_func __attribute__((overloadable)) mad_sat(long a, long b, long c);
+ulong const_func __attribute__((overloadable)) mad_sat(ulong a, ulong b, ulong c);
+long2 const_func __attribute__((overloadable)) mad_sat(long2 a, long2 b, long2 c);
+ulong2 const_func __attribute__((overloadable)) mad_sat(ulong2 a, ulong2 b, ulong2 c);
+long3 const_func __attribute__((overloadable)) mad_sat(long3 a, long3 b, long3 c);
+ulong3 const_func __attribute__((overloadable)) mad_sat(ulong3 a, ulong3 b, ulong3 c);
+long4 const_func __attribute__((overloadable)) mad_sat(long4 a, long4 b, long4 c);
+ulong4 const_func __attribute__((overloadable)) mad_sat(ulong4 a, ulong4 b, ulong4 c);
+long8 const_func __attribute__((overloadable)) mad_sat(long8 a, long8 b, long8 c);
+ulong8 const_func __attribute__((overloadable)) mad_sat(ulong8 a, ulong8 b, ulong8 c);
+long16 const_func __attribute__((overloadable)) mad_sat(long16 a, long16 b, long16 c);
+ulong16 const_func __attribute__((overloadable)) mad_sat(ulong16 a, ulong16 b, ulong16 c);
 
 /**
  * Returns y if x < y, otherwise it returns x.
  */
-char __attribute__((overloadable)) max(char x, char y);
-uchar __attribute__((overloadable)) max(uchar x, uchar y);
-char2 __attribute__((overloadable)) max(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) max(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) max(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) max(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) max(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) max(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) max(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) max(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) max(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) max(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) max(short x, short y);
-ushort __attribute__((overloadable)) max(ushort x, ushort y);
-short2 __attribute__((overloadable)) max(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) max(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) max(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) max(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) max(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) max(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) max(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) max(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) max(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) max(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) max(int x, int y);
-uint __attribute__((overloadable)) max(uint x, uint y);
-int2 __attribute__((overloadable)) max(int2 x, int2 y);
-uint2 __attribute__((overloadable)) max(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) max(int3 x, int3 y);
-uint3 __attribute__((overloadable)) max(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) max(int4 x, int4 y);
-uint4 __attribute__((overloadable)) max(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) max(int8 x, int8 y);
-uint8 __attribute__((overloadable)) max(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) max(int16 x, int16 y);
-uint16 __attribute__((overloadable)) max(uint16 x, uint16 y);
-long __attribute__((overloadable)) max(long x, long y);
-ulong __attribute__((overloadable)) max(ulong x, ulong y);
-long2 __attribute__((overloadable)) max(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) max(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) max(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) max(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) max(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) max(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) max(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) max(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) max(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) max(ulong16 x, ulong16 y);
-char __attribute__((overloadable)) max(char x, char y);
-uchar __attribute__((overloadable)) max(uchar x, uchar y);
-char2 __attribute__((overloadable)) max(char2 x, char y);
-uchar2 __attribute__((overloadable)) max(uchar2 x, uchar y);
-char3 __attribute__((overloadable)) max(char3 x, char y);
-uchar3 __attribute__((overloadable)) max(uchar3 x, uchar y);
-char4 __attribute__((overloadable)) max(char4 x, char y);
-uchar4 __attribute__((overloadable)) max(uchar4 x, uchar y);
-char8 __attribute__((overloadable)) max(char8 x, char y);
-uchar8 __attribute__((overloadable)) max(uchar8 x, uchar y);
-char16 __attribute__((overloadable)) max(char16 x, char y);
-uchar16 __attribute__((overloadable)) max(uchar16 x, uchar y);
-short __attribute__((overloadable)) max(short x, short y);
-ushort __attribute__((overloadable)) max(ushort x, ushort y);
-short2 __attribute__((overloadable)) max(short2 x, short y);
-ushort2 __attribute__((overloadable)) max(ushort2 x, ushort y);
-short3 __attribute__((overloadable)) max(short3 x, short y);
-ushort3 __attribute__((overloadable)) max(ushort3 x, ushort y);
-short4 __attribute__((overloadable)) max(short4 x, short y);
-ushort4 __attribute__((overloadable)) max(ushort4 x, ushort y);
-short8 __attribute__((overloadable)) max(short8 x, short y);
-ushort8 __attribute__((overloadable)) max(ushort8 x, ushort y);
-short16 __attribute__((overloadable)) max(short16 x, short y);
-ushort16 __attribute__((overloadable)) max(ushort16 x, ushort y);
-int __attribute__((overloadable)) max(int x, int y);
-uint __attribute__((overloadable)) max(uint x, uint y);
-int2 __attribute__((overloadable)) max(int2 x, int y);
-uint2 __attribute__((overloadable)) max(uint2 x, uint y);
-int3 __attribute__((overloadable)) max(int3 x, int y);
-uint3 __attribute__((overloadable)) max(uint3 x, uint y);
-int4 __attribute__((overloadable)) max(int4 x, int y);
-uint4 __attribute__((overloadable)) max(uint4 x, uint y);
-int8 __attribute__((overloadable)) max(int8 x, int y);
-uint8 __attribute__((overloadable)) max(uint8 x, uint y);
-int16 __attribute__((overloadable)) max(int16 x, int y);
-uint16 __attribute__((overloadable)) max(uint16 x, uint y);
-long __attribute__((overloadable)) max(long x, long y);
-ulong __attribute__((overloadable)) max(ulong x, ulong y);
-long2 __attribute__((overloadable)) max(long2 x, long y);
-ulong2 __attribute__((overloadable)) max(ulong2 x, ulong y);
-long3 __attribute__((overloadable)) max(long3 x, long y);
-ulong3 __attribute__((overloadable)) max(ulong3 x, ulong y);
-long4 __attribute__((overloadable)) max(long4 x, long y);
-ulong4 __attribute__((overloadable)) max(ulong4 x, ulong y);
-long8 __attribute__((overloadable)) max(long8 x, long y);
-ulong8 __attribute__((overloadable)) max(ulong8 x, ulong y);
-long16 __attribute__((overloadable)) max(long16 x, long y);
-ulong16 __attribute__((overloadable)) max(ulong16 x, ulong y);
+char const_func __attribute__((overloadable)) max(char x, char y);
+uchar const_func __attribute__((overloadable)) max(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) max(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) max(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) max(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) max(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) max(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) max(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) max(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) max(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) max(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) max(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) max(short x, short y);
+ushort const_func __attribute__((overloadable)) max(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) max(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) max(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) max(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) max(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) max(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) max(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) max(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) max(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) max(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) max(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) max(int x, int y);
+uint const_func __attribute__((overloadable)) max(uint x, uint y);
+int2 const_func __attribute__((overloadable)) max(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) max(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) max(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) max(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) max(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) max(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) max(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) max(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) max(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) max(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) max(long x, long y);
+ulong const_func __attribute__((overloadable)) max(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) max(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) max(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) max(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) max(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) max(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) max(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) max(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) max(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) max(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) max(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) max(char x, char y);
+uchar const_func __attribute__((overloadable)) max(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) max(char2 x, char y);
+uchar2 const_func __attribute__((overloadable)) max(uchar2 x, uchar y);
+char3 const_func __attribute__((overloadable)) max(char3 x, char y);
+uchar3 const_func __attribute__((overloadable)) max(uchar3 x, uchar y);
+char4 const_func __attribute__((overloadable)) max(char4 x, char y);
+uchar4 const_func __attribute__((overloadable)) max(uchar4 x, uchar y);
+char8 const_func __attribute__((overloadable)) max(char8 x, char y);
+uchar8 const_func __attribute__((overloadable)) max(uchar8 x, uchar y);
+char16 const_func __attribute__((overloadable)) max(char16 x, char y);
+uchar16 const_func __attribute__((overloadable)) max(uchar16 x, uchar y);
+short const_func __attribute__((overloadable)) max(short x, short y);
+ushort const_func __attribute__((overloadable)) max(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) max(short2 x, short y);
+ushort2 const_func __attribute__((overloadable)) max(ushort2 x, ushort y);
+short3 const_func __attribute__((overloadable)) max(short3 x, short y);
+ushort3 const_func __attribute__((overloadable)) max(ushort3 x, ushort y);
+short4 const_func __attribute__((overloadable)) max(short4 x, short y);
+ushort4 const_func __attribute__((overloadable)) max(ushort4 x, ushort y);
+short8 const_func __attribute__((overloadable)) max(short8 x, short y);
+ushort8 const_func __attribute__((overloadable)) max(ushort8 x, ushort y);
+short16 const_func __attribute__((overloadable)) max(short16 x, short y);
+ushort16 const_func __attribute__((overloadable)) max(ushort16 x, ushort y);
+int const_func __attribute__((overloadable)) max(int x, int y);
+uint const_func __attribute__((overloadable)) max(uint x, uint y);
+int2 const_func __attribute__((overloadable)) max(int2 x, int y);
+uint2 const_func __attribute__((overloadable)) max(uint2 x, uint y);
+int3 const_func __attribute__((overloadable)) max(int3 x, int y);
+uint3 const_func __attribute__((overloadable)) max(uint3 x, uint y);
+int4 const_func __attribute__((overloadable)) max(int4 x, int y);
+uint4 const_func __attribute__((overloadable)) max(uint4 x, uint y);
+int8 const_func __attribute__((overloadable)) max(int8 x, int y);
+uint8 const_func __attribute__((overloadable)) max(uint8 x, uint y);
+int16 const_func __attribute__((overloadable)) max(int16 x, int y);
+uint16 const_func __attribute__((overloadable)) max(uint16 x, uint y);
+long const_func __attribute__((overloadable)) max(long x, long y);
+ulong const_func __attribute__((overloadable)) max(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) max(long2 x, long y);
+ulong2 const_func __attribute__((overloadable)) max(ulong2 x, ulong y);
+long3 const_func __attribute__((overloadable)) max(long3 x, long y);
+ulong3 const_func __attribute__((overloadable)) max(ulong3 x, ulong y);
+long4 const_func __attribute__((overloadable)) max(long4 x, long y);
+ulong4 const_func __attribute__((overloadable)) max(ulong4 x, ulong y);
+long8 const_func __attribute__((overloadable)) max(long8 x, long y);
+ulong8 const_func __attribute__((overloadable)) max(ulong8 x, ulong y);
+long16 const_func __attribute__((overloadable)) max(long16 x, long y);
+ulong16 const_func __attribute__((overloadable)) max(ulong16 x, ulong y);
 
 /**
  * Returns y if y < x, otherwise it returns x.
  */
-char __attribute__((overloadable)) min(char x, char y);
-uchar __attribute__((overloadable)) min(uchar x, uchar y);
-char2 __attribute__((overloadable)) min(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) min(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) min(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) min(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) min(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) min(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) min(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) min(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) min(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) min(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) min(short x, short y);
-ushort __attribute__((overloadable)) min(ushort x, ushort y);
-short2 __attribute__((overloadable)) min(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) min(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) min(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) min(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) min(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) min(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) min(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) min(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) min(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) min(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) min(int x, int y);
-uint __attribute__((overloadable)) min(uint x, uint y);
-int2 __attribute__((overloadable)) min(int2 x, int2 y);
-uint2 __attribute__((overloadable)) min(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) min(int3 x, int3 y);
-uint3 __attribute__((overloadable)) min(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) min(int4 x, int4 y);
-uint4 __attribute__((overloadable)) min(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) min(int8 x, int8 y);
-uint8 __attribute__((overloadable)) min(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) min(int16 x, int16 y);
-uint16 __attribute__((overloadable)) min(uint16 x, uint16 y);
-long __attribute__((overloadable)) min(long x, long y);
-ulong __attribute__((overloadable)) min(ulong x, ulong y);
-long2 __attribute__((overloadable)) min(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) min(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) min(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) min(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) min(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) min(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) min(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) min(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) min(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) min(ulong16 x, ulong16 y);
-char __attribute__((overloadable)) min(char x, char y);
-uchar __attribute__((overloadable)) min(uchar x, uchar y);
-char2 __attribute__((overloadable)) min(char2 x, char y);
-uchar2 __attribute__((overloadable)) min(uchar2 x, uchar y);
-char3 __attribute__((overloadable)) min(char3 x, char y);
-uchar3 __attribute__((overloadable)) min(uchar3 x, uchar y);
-char4 __attribute__((overloadable)) min(char4 x, char y);
-uchar4 __attribute__((overloadable)) min(uchar4 x, uchar y);
-char8 __attribute__((overloadable)) min(char8 x, char y);
-uchar8 __attribute__((overloadable)) min(uchar8 x, uchar y);
-char16 __attribute__((overloadable)) min(char16 x, char y);
-uchar16 __attribute__((overloadable)) min(uchar16 x, uchar y);
-short __attribute__((overloadable)) min(short x, short y);
-ushort __attribute__((overloadable)) min(ushort x, ushort y);
-short2 __attribute__((overloadable)) min(short2 x, short y);
-ushort2 __attribute__((overloadable)) min(ushort2 x, ushort y);
-short3 __attribute__((overloadable)) min(short3 x, short y);
-ushort3 __attribute__((overloadable)) min(ushort3 x, ushort y);
-short4 __attribute__((overloadable)) min(short4 x, short y);
-ushort4 __attribute__((overloadable)) min(ushort4 x, ushort y);
-short8 __attribute__((overloadable)) min(short8 x, short y);
-ushort8 __attribute__((overloadable)) min(ushort8 x, ushort y);
-short16 __attribute__((overloadable)) min(short16 x, short y);
-ushort16 __attribute__((overloadable)) min(ushort16 x, ushort y);
-int __attribute__((overloadable)) min(int x, int y);
-uint __attribute__((overloadable)) min(uint x, uint y);
-int2 __attribute__((overloadable)) min(int2 x, int y);
-uint2 __attribute__((overloadable)) min(uint2 x, uint y);
-int3 __attribute__((overloadable)) min(int3 x, int y);
-uint3 __attribute__((overloadable)) min(uint3 x, uint y);
-int4 __attribute__((overloadable)) min(int4 x, int y);
-uint4 __attribute__((overloadable)) min(uint4 x, uint y);
-int8 __attribute__((overloadable)) min(int8 x, int y);
-uint8 __attribute__((overloadable)) min(uint8 x, uint y);
-int16 __attribute__((overloadable)) min(int16 x, int y);
-uint16 __attribute__((overloadable)) min(uint16 x, uint y);
-long __attribute__((overloadable)) min(long x, long y);
-ulong __attribute__((overloadable)) min(ulong x, ulong y);
-long2 __attribute__((overloadable)) min(long2 x, long y);
-ulong2 __attribute__((overloadable)) min(ulong2 x, ulong y);
-long3 __attribute__((overloadable)) min(long3 x, long y);
-ulong3 __attribute__((overloadable)) min(ulong3 x, ulong y);
-long4 __attribute__((overloadable)) min(long4 x, long y);
-ulong4 __attribute__((overloadable)) min(ulong4 x, ulong y);
-long8 __attribute__((overloadable)) min(long8 x, long y);
-ulong8 __attribute__((overloadable)) min(ulong8 x, ulong y);
-long16 __attribute__((overloadable)) min(long16 x, long y);
-ulong16 __attribute__((overloadable)) min(ulong16 x, ulong y);
-
-int __attribute__((overloadable)) min(ulong x, int y);
-uint __attribute__((overloadable)) min(ulong x, uint y);
+char const_func __attribute__((overloadable)) min(char x, char y);
+uchar const_func __attribute__((overloadable)) min(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) min(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) min(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) min(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) min(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) min(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) min(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) min(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) min(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) min(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) min(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) min(short x, short y);
+ushort const_func __attribute__((overloadable)) min(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) min(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) min(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) min(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) min(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) min(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) min(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) min(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) min(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) min(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) min(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) min(int x, int y);
+uint const_func __attribute__((overloadable)) min(uint x, uint y);
+int2 const_func __attribute__((overloadable)) min(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) min(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) min(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) min(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) min(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) min(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) min(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) min(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) min(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) min(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) min(long x, long y);
+ulong const_func __attribute__((overloadable)) min(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) min(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) min(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) min(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) min(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) min(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) min(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) min(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) min(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) min(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) min(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) min(char x, char y);
+uchar const_func __attribute__((overloadable)) min(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) min(char2 x, char y);
+uchar2 const_func __attribute__((overloadable)) min(uchar2 x, uchar y);
+char3 const_func __attribute__((overloadable)) min(char3 x, char y);
+uchar3 const_func __attribute__((overloadable)) min(uchar3 x, uchar y);
+char4 const_func __attribute__((overloadable)) min(char4 x, char y);
+uchar4 const_func __attribute__((overloadable)) min(uchar4 x, uchar y);
+char8 const_func __attribute__((overloadable)) min(char8 x, char y);
+uchar8 const_func __attribute__((overloadable)) min(uchar8 x, uchar y);
+char16 const_func __attribute__((overloadable)) min(char16 x, char y);
+uchar16 const_func __attribute__((overloadable)) min(uchar16 x, uchar y);
+short const_func __attribute__((overloadable)) min(short x, short y);
+ushort const_func __attribute__((overloadable)) min(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) min(short2 x, short y);
+ushort2 const_func __attribute__((overloadable)) min(ushort2 x, ushort y);
+short3 const_func __attribute__((overloadable)) min(short3 x, short y);
+ushort3 const_func __attribute__((overloadable)) min(ushort3 x, ushort y);
+short4 const_func __attribute__((overloadable)) min(short4 x, short y);
+ushort4 const_func __attribute__((overloadable)) min(ushort4 x, ushort y);
+short8 const_func __attribute__((overloadable)) min(short8 x, short y);
+ushort8 const_func __attribute__((overloadable)) min(ushort8 x, ushort y);
+short16 const_func __attribute__((overloadable)) min(short16 x, short y);
+ushort16 const_func __attribute__((overloadable)) min(ushort16 x, ushort y);
+int const_func __attribute__((overloadable)) min(int x, int y);
+uint const_func __attribute__((overloadable)) min(uint x, uint y);
+int2 const_func __attribute__((overloadable)) min(int2 x, int y);
+uint2 const_func __attribute__((overloadable)) min(uint2 x, uint y);
+int3 const_func __attribute__((overloadable)) min(int3 x, int y);
+uint3 const_func __attribute__((overloadable)) min(uint3 x, uint y);
+int4 const_func __attribute__((overloadable)) min(int4 x, int y);
+uint4 const_func __attribute__((overloadable)) min(uint4 x, uint y);
+int8 const_func __attribute__((overloadable)) min(int8 x, int y);
+uint8 const_func __attribute__((overloadable)) min(uint8 x, uint y);
+int16 const_func __attribute__((overloadable)) min(int16 x, int y);
+uint16 const_func __attribute__((overloadable)) min(uint16 x, uint y);
+long const_func __attribute__((overloadable)) min(long x, long y);
+ulong const_func __attribute__((overloadable)) min(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) min(long2 x, long y);
+ulong2 const_func __attribute__((overloadable)) min(ulong2 x, ulong y);
+long3 const_func __attribute__((overloadable)) min(long3 x, long y);
+ulong3 const_func __attribute__((overloadable)) min(ulong3 x, ulong y);
+long4 const_func __attribute__((overloadable)) min(long4 x, long y);
+ulong4 const_func __attribute__((overloadable)) min(ulong4 x, ulong y);
+long8 const_func __attribute__((overloadable)) min(long8 x, long y);
+ulong8 const_func __attribute__((overloadable)) min(ulong8 x, ulong y);
+long16 const_func __attribute__((overloadable)) min(long16 x, long y);
+ulong16 const_func __attribute__((overloadable)) min(ulong16 x, ulong y);
+int const_func __attribute__((overloadable)) min(ulong x, int y);
+uint const_func __attribute__((overloadable)) min(ulong x, uint y);
 
 /**
  * Computes x * y and returns the high half of the
  * product of x and y.
  */
-char __attribute__((overloadable)) mul_hi(char x, char y);
-uchar __attribute__((overloadable)) mul_hi(uchar x, uchar y);
-char2 __attribute__((overloadable)) mul_hi(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) mul_hi(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) mul_hi(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) mul_hi(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) mul_hi(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) mul_hi(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) mul_hi(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) mul_hi(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) mul_hi(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) mul_hi(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) mul_hi(short x, short y);
-ushort __attribute__((overloadable)) mul_hi(ushort x, ushort y);
-short2 __attribute__((overloadable)) mul_hi(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) mul_hi(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) mul_hi(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) mul_hi(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) mul_hi(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) mul_hi(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) mul_hi(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) mul_hi(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) mul_hi(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) mul_hi(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) mul_hi(int x, int y);
-uint __attribute__((overloadable)) mul_hi(uint x, uint y);
-int2 __attribute__((overloadable)) mul_hi(int2 x, int2 y);
-uint2 __attribute__((overloadable)) mul_hi(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) mul_hi(int3 x, int3 y);
-uint3 __attribute__((overloadable)) mul_hi(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) mul_hi(int4 x, int4 y);
-uint4 __attribute__((overloadable)) mul_hi(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) mul_hi(int8 x, int8 y);
-uint8 __attribute__((overloadable)) mul_hi(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) mul_hi(int16 x, int16 y);
-uint16 __attribute__((overloadable)) mul_hi(uint16 x, uint16 y);
-long __attribute__((overloadable)) mul_hi(long x, long y);
-ulong __attribute__((overloadable)) mul_hi(ulong x, ulong y);
-long2 __attribute__((overloadable)) mul_hi(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) mul_hi(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) mul_hi(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) mul_hi(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) mul_hi(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) mul_hi(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) mul_hi(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) mul_hi(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) mul_hi(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) mul_hi(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) mul_hi(char x, char y);
+uchar const_func __attribute__((overloadable)) mul_hi(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) mul_hi(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) mul_hi(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) mul_hi(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) mul_hi(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) mul_hi(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) mul_hi(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) mul_hi(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) mul_hi(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) mul_hi(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) mul_hi(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) mul_hi(short x, short y);
+ushort const_func __attribute__((overloadable)) mul_hi(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) mul_hi(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) mul_hi(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) mul_hi(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) mul_hi(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) mul_hi(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) mul_hi(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) mul_hi(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) mul_hi(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) mul_hi(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) mul_hi(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) mul_hi(int x, int y);
+uint const_func __attribute__((overloadable)) mul_hi(uint x, uint y);
+int2 const_func __attribute__((overloadable)) mul_hi(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) mul_hi(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) mul_hi(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) mul_hi(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) mul_hi(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) mul_hi(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) mul_hi(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) mul_hi(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) mul_hi(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) mul_hi(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) mul_hi(long x, long y);
+ulong const_func __attribute__((overloadable)) mul_hi(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) mul_hi(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) mul_hi(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) mul_hi(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) mul_hi(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) mul_hi(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) mul_hi(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) mul_hi(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) mul_hi(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) mul_hi(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) mul_hi(ulong16 x, ulong16 y);
 
 /**
  * For each element in v, the bits are shifted left by
@@ -2063,155 +2083,157 @@ ulong16 __attribute__((overloadable)) mul_hi(ulong16 x, ulong16 y);
  * side of the element are shifted back in from the
  * right.
  */
-char __attribute__((overloadable)) rotate(char v, char i);
-uchar __attribute__((overloadable)) rotate(uchar v, uchar i);
-char2 __attribute__((overloadable)) rotate(char2 v, char2 i);
-uchar2 __attribute__((overloadable)) rotate(uchar2 v, uchar2 i);
-char3 __attribute__((overloadable)) rotate(char3 v, char3 i);
-uchar3 __attribute__((overloadable)) rotate(uchar3 v, uchar3 i);
-char4 __attribute__((overloadable)) rotate(char4 v, char4 i);
-uchar4 __attribute__((overloadable)) rotate(uchar4 v, uchar4 i);
-char8 __attribute__((overloadable)) rotate(char8 v, char8 i);
-uchar8 __attribute__((overloadable)) rotate(uchar8 v, uchar8 i);
-char16 __attribute__((overloadable)) rotate(char16 v, char16 i);
-uchar16 __attribute__((overloadable)) rotate(uchar16 v, uchar16 i);
-short __attribute__((overloadable)) rotate(short v, short i);
-ushort __attribute__((overloadable)) rotate(ushort v, ushort i);
-short2 __attribute__((overloadable)) rotate(short2 v, short2 i);
-ushort2 __attribute__((overloadable)) rotate(ushort2 v, ushort2 i);
-short3 __attribute__((overloadable)) rotate(short3 v, short3 i);
-ushort3 __attribute__((overloadable)) rotate(ushort3 v, ushort3 i);
-short4 __attribute__((overloadable)) rotate(short4 v, short4 i);
-ushort4 __attribute__((overloadable)) rotate(ushort4 v, ushort4 i);
-short8 __attribute__((overloadable)) rotate(short8 v, short8 i);
-ushort8 __attribute__((overloadable)) rotate(ushort8 v, ushort8 i);
-short16 __attribute__((overloadable)) rotate(short16 v, short16 i);
-ushort16 __attribute__((overloadable)) rotate(ushort16 v, ushort16 i);
-int __attribute__((overloadable)) rotate(int v, int i);
-uint __attribute__((overloadable)) rotate(uint v, uint i);
-int2 __attribute__((overloadable)) rotate(int2 v, int2 i);
-uint2 __attribute__((overloadable)) rotate(uint2 v, uint2 i);
-int3 __attribute__((overloadable)) rotate(int3 v, int3 i);
-uint3 __attribute__((overloadable)) rotate(uint3 v, uint3 i);
-int4 __attribute__((overloadable)) rotate(int4 v, int4 i);
-uint4 __attribute__((overloadable)) rotate(uint4 v, uint4 i);
-int8 __attribute__((overloadable)) rotate(int8 v, int8 i);
-uint8 __attribute__((overloadable)) rotate(uint8 v, uint8 i);
-int16 __attribute__((overloadable)) rotate(int16 v, int16 i);
-uint16 __attribute__((overloadable)) rotate(uint16 v, uint16 i);
-long __attribute__((overloadable)) rotate(long v, long i);
-ulong __attribute__((overloadable)) rotate(ulong v, ulong i);
-long2 __attribute__((overloadable)) rotate(long2 v, long2 i);
-ulong2 __attribute__((overloadable)) rotate(ulong2 v, ulong2 i);
-long3 __attribute__((overloadable)) rotate(long3 v, long3 i);
-ulong3 __attribute__((overloadable)) rotate(ulong3 v, ulong3 i);
-long4 __attribute__((overloadable)) rotate(long4 v, long4 i);
-ulong4 __attribute__((overloadable)) rotate(ulong4 v, ulong4 i);
-long8 __attribute__((overloadable)) rotate(long8 v, long8 i);
-ulong8 __attribute__((overloadable)) rotate(ulong8 v, ulong8 i);
-long16 __attribute__((overloadable)) rotate(long16 v, long16 i);
-ulong16 __attribute__((overloadable)) rotate(ulong16 v, ulong16 i);
+char const_func __attribute__((overloadable)) rotate(char v, char i);
+uchar const_func __attribute__((overloadable)) rotate(uchar v, uchar i);
+char2 const_func __attribute__((overloadable)) rotate(char2 v, char2 i);
+uchar2 const_func __attribute__((overloadable)) rotate(uchar2 v, uchar2 i);
+char3 const_func __attribute__((overloadable)) rotate(char3 v, char3 i);
+uchar3 const_func __attribute__((overloadable)) rotate(uchar3 v, uchar3 i);
+char4 const_func __attribute__((overloadable)) rotate(char4 v, char4 i);
+uchar4 const_func __attribute__((overloadable)) rotate(uchar4 v, uchar4 i);
+char8 const_func __attribute__((overloadable)) rotate(char8 v, char8 i);
+uchar8 const_func __attribute__((overloadable)) rotate(uchar8 v, uchar8 i);
+char16 const_func __attribute__((overloadable)) rotate(char16 v, char16 i);
+uchar16 const_func __attribute__((overloadable)) rotate(uchar16 v, uchar16 i);
+short const_func __attribute__((overloadable)) rotate(short v, short i);
+ushort const_func __attribute__((overloadable)) rotate(ushort v, ushort i);
+short2 const_func __attribute__((overloadable)) rotate(short2 v, short2 i);
+ushort2 const_func __attribute__((overloadable)) rotate(ushort2 v, ushort2 i);
+short3 const_func __attribute__((overloadable)) rotate(short3 v, short3 i);
+ushort3 const_func __attribute__((overloadable)) rotate(ushort3 v, ushort3 i);
+short4 const_func __attribute__((overloadable)) rotate(short4 v, short4 i);
+ushort4 const_func __attribute__((overloadable)) rotate(ushort4 v, ushort4 i);
+short8 const_func __attribute__((overloadable)) rotate(short8 v, short8 i);
+ushort8 const_func __attribute__((overloadable)) rotate(ushort8 v, ushort8 i);
+short16 const_func __attribute__((overloadable)) rotate(short16 v, short16 i);
+ushort16 const_func __attribute__((overloadable)) rotate(ushort16 v, ushort16 i);
+int const_func __attribute__((overloadable)) rotate(int v, int i);
+uint const_func __attribute__((overloadable)) rotate(uint v, uint i);
+int2 const_func __attribute__((overloadable)) rotate(int2 v, int2 i);
+uint2 const_func __attribute__((overloadable)) rotate(uint2 v, uint2 i);
+int3 const_func __attribute__((overloadable)) rotate(int3 v, int3 i);
+uint3 const_func __attribute__((overloadable)) rotate(uint3 v, uint3 i);
+int4 const_func __attribute__((overloadable)) rotate(int4 v, int4 i);
+uint4 const_func __attribute__((overloadable)) rotate(uint4 v, uint4 i);
+int8 const_func __attribute__((overloadable)) rotate(int8 v, int8 i);
+uint8 const_func __attribute__((overloadable)) rotate(uint8 v, uint8 i);
+int16 const_func __attribute__((overloadable)) rotate(int16 v, int16 i);
+uint16 const_func __attribute__((overloadable)) rotate(uint16 v, uint16 i);
+long const_func __attribute__((overloadable)) rotate(long v, long i);
+ulong const_func __attribute__((overloadable)) rotate(ulong v, ulong i);
+long2 const_func __attribute__((overloadable)) rotate(long2 v, long2 i);
+ulong2 const_func __attribute__((overloadable)) rotate(ulong2 v, ulong2 i);
+long3 const_func __attribute__((overloadable)) rotate(long3 v, long3 i);
+ulong3 const_func __attribute__((overloadable)) rotate(ulong3 v, ulong3 i);
+long4 const_func __attribute__((overloadable)) rotate(long4 v, long4 i);
+ulong4 const_func __attribute__((overloadable)) rotate(ulong4 v, ulong4 i);
+long8 const_func __attribute__((overloadable)) rotate(long8 v, long8 i);
+ulong8 const_func __attribute__((overloadable)) rotate(ulong8 v, ulong8 i);
+long16 const_func __attribute__((overloadable)) rotate(long16 v, long16 i);
+ulong16 const_func __attribute__((overloadable)) rotate(ulong16 v, ulong16 i);
 
 /**
  * Returns x - y and saturates the result.
  */
-char __attribute__((overloadable)) sub_sat(char x, char y);
-uchar __attribute__((overloadable)) sub_sat(uchar x, uchar y);
-char2 __attribute__((overloadable)) sub_sat(char2 x, char2 y);
-uchar2 __attribute__((overloadable)) sub_sat(uchar2 x, uchar2 y);
-char3 __attribute__((overloadable)) sub_sat(char3 x, char3 y);
-uchar3 __attribute__((overloadable)) sub_sat(uchar3 x, uchar3 y);
-char4 __attribute__((overloadable)) sub_sat(char4 x, char4 y);
-uchar4 __attribute__((overloadable)) sub_sat(uchar4 x, uchar4 y);
-char8 __attribute__((overloadable)) sub_sat(char8 x, char8 y);
-uchar8 __attribute__((overloadable)) sub_sat(uchar8 x, uchar8 y);
-char16 __attribute__((overloadable)) sub_sat(char16 x, char16 y);
-uchar16 __attribute__((overloadable)) sub_sat(uchar16 x, uchar16 y);
-short __attribute__((overloadable)) sub_sat(short x, short y);
-ushort __attribute__((overloadable)) sub_sat(ushort x, ushort y);
-short2 __attribute__((overloadable)) sub_sat(short2 x, short2 y);
-ushort2 __attribute__((overloadable)) sub_sat(ushort2 x, ushort2 y);
-short3 __attribute__((overloadable)) sub_sat(short3 x, short3 y);
-ushort3 __attribute__((overloadable)) sub_sat(ushort3 x, ushort3 y);
-short4 __attribute__((overloadable)) sub_sat(short4 x, short4 y);
-ushort4 __attribute__((overloadable)) sub_sat(ushort4 x, ushort4 y);
-short8 __attribute__((overloadable)) sub_sat(short8 x, short8 y);
-ushort8 __attribute__((overloadable)) sub_sat(ushort8 x, ushort8 y);
-short16 __attribute__((overloadable)) sub_sat(short16 x, short16 y);
-ushort16 __attribute__((overloadable)) sub_sat(ushort16 x, ushort16 y);
-int __attribute__((overloadable)) sub_sat(int x, int y);
-uint __attribute__((overloadable)) sub_sat(uint x, uint y);
-int2 __attribute__((overloadable)) sub_sat(int2 x, int2 y);
-uint2 __attribute__((overloadable)) sub_sat(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) sub_sat(int3 x, int3 y);
-uint3 __attribute__((overloadable)) sub_sat(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) sub_sat(int4 x, int4 y);
-uint4 __attribute__((overloadable)) sub_sat(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) sub_sat(int8 x, int8 y);
-uint8 __attribute__((overloadable)) sub_sat(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) sub_sat(int16 x, int16 y);
-uint16 __attribute__((overloadable)) sub_sat(uint16 x, uint16 y);
-long __attribute__((overloadable)) sub_sat(long x, long y);
-ulong __attribute__((overloadable)) sub_sat(ulong x, ulong y);
-long2 __attribute__((overloadable)) sub_sat(long2 x, long2 y);
-ulong2 __attribute__((overloadable)) sub_sat(ulong2 x, ulong2 y);
-long3 __attribute__((overloadable)) sub_sat(long3 x, long3 y);
-ulong3 __attribute__((overloadable)) sub_sat(ulong3 x, ulong3 y);
-long4 __attribute__((overloadable)) sub_sat(long4 x, long4 y);
-ulong4 __attribute__((overloadable)) sub_sat(ulong4 x, ulong4 y);
-long8 __attribute__((overloadable)) sub_sat(long8 x, long8 y);
-ulong8 __attribute__((overloadable)) sub_sat(ulong8 x, ulong8 y);
-long16 __attribute__((overloadable)) sub_sat(long16 x, long16 y);
-ulong16 __attribute__((overloadable)) sub_sat(ulong16 x, ulong16 y);
+char const_func __attribute__((overloadable)) sub_sat(char x, char y);
+uchar const_func __attribute__((overloadable)) sub_sat(uchar x, uchar y);
+char2 const_func __attribute__((overloadable)) sub_sat(char2 x, char2 y);
+uchar2 const_func __attribute__((overloadable)) sub_sat(uchar2 x, uchar2 y);
+char3 const_func __attribute__((overloadable)) sub_sat(char3 x, char3 y);
+uchar3 const_func __attribute__((overloadable)) sub_sat(uchar3 x, uchar3 y);
+char4 const_func __attribute__((overloadable)) sub_sat(char4 x, char4 y);
+uchar4 const_func __attribute__((overloadable)) sub_sat(uchar4 x, uchar4 y);
+char8 const_func __attribute__((overloadable)) sub_sat(char8 x, char8 y);
+uchar8 const_func __attribute__((overloadable)) sub_sat(uchar8 x, uchar8 y);
+char16 const_func __attribute__((overloadable)) sub_sat(char16 x, char16 y);
+uchar16 const_func __attribute__((overloadable)) sub_sat(uchar16 x, uchar16 y);
+short const_func __attribute__((overloadable)) sub_sat(short x, short y);
+ushort const_func __attribute__((overloadable)) sub_sat(ushort x, ushort y);
+short2 const_func __attribute__((overloadable)) sub_sat(short2 x, short2 y);
+ushort2 const_func __attribute__((overloadable)) sub_sat(ushort2 x, ushort2 y);
+short3 const_func __attribute__((overloadable)) sub_sat(short3 x, short3 y);
+ushort3 const_func __attribute__((overloadable)) sub_sat(ushort3 x, ushort3 y);
+short4 const_func __attribute__((overloadable)) sub_sat(short4 x, short4 y);
+ushort4 const_func __attribute__((overloadable)) sub_sat(ushort4 x, ushort4 y);
+short8 const_func __attribute__((overloadable)) sub_sat(short8 x, short8 y);
+ushort8 const_func __attribute__((overloadable)) sub_sat(ushort8 x, ushort8 y);
+short16 const_func __attribute__((overloadable)) sub_sat(short16 x, short16 y);
+ushort16 const_func __attribute__((overloadable)) sub_sat(ushort16 x, ushort16 y);
+int const_func __attribute__((overloadable)) sub_sat(int x, int y);
+uint const_func __attribute__((overloadable)) sub_sat(uint x, uint y);
+int2 const_func __attribute__((overloadable)) sub_sat(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) sub_sat(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) sub_sat(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) sub_sat(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) sub_sat(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) sub_sat(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) sub_sat(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) sub_sat(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) sub_sat(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) sub_sat(uint16 x, uint16 y);
+long const_func __attribute__((overloadable)) sub_sat(long x, long y);
+ulong const_func __attribute__((overloadable)) sub_sat(ulong x, ulong y);
+long2 const_func __attribute__((overloadable)) sub_sat(long2 x, long2 y);
+ulong2 const_func __attribute__((overloadable)) sub_sat(ulong2 x, ulong2 y);
+long3 const_func __attribute__((overloadable)) sub_sat(long3 x, long3 y);
+ulong3 const_func __attribute__((overloadable)) sub_sat(ulong3 x, ulong3 y);
+long4 const_func __attribute__((overloadable)) sub_sat(long4 x, long4 y);
+ulong4 const_func __attribute__((overloadable)) sub_sat(ulong4 x, ulong4 y);
+long8 const_func __attribute__((overloadable)) sub_sat(long8 x, long8 y);
+ulong8 const_func __attribute__((overloadable)) sub_sat(ulong8 x, ulong8 y);
+long16 const_func __attribute__((overloadable)) sub_sat(long16 x, long16 y);
+ulong16 const_func __attribute__((overloadable)) sub_sat(ulong16 x, ulong16 y);
 
 /**
  * result[i] = ((short)hi[i] << 8) | lo[i]
  * result[i] = ((ushort)hi[i] << 8) | lo[i]
  */
-short __attribute__((overloadable)) upsample(char hi, uchar lo);
-ushort __attribute__((overloadable)) upsample (uchar hi, uchar lo);
-short2 __attribute__((overloadable)) upsample (char2 hi, uchar2 lo);
-short3 __attribute__((overloadable)) upsample (char3 hi, uchar3 lo);
-short4 __attribute__((overloadable)) upsample (char4 hi, uchar4 lo);
-short8 __attribute__((overloadable)) upsample (char8 hi, uchar8 lo);
-short16 __attribute__((overloadable)) upsample (char16 hi, uchar16 lo);
-ushort2 __attribute__((overloadable)) upsample (uchar2 hi, uchar2 lo);
-ushort3 __attribute__((overloadable)) upsample (uchar3 hi, uchar3 lo);
-ushort4 __attribute__((overloadable)) upsample (uchar4 hi, uchar4 lo);
-ushort8 __attribute__((overloadable)) upsample (uchar8 hi, uchar8 lo);
-ushort16 __attribute__((overloadable)) upsample (uchar16 hi, uchar16 lo);
+short const_func __attribute__((overloadable)) upsample(char hi, uchar lo);
+ushort const_func __attribute__((overloadable)) upsample (uchar hi, uchar lo);
+short2 const_func __attribute__((overloadable)) upsample (char2 hi, uchar2 lo);
+short3 const_func __attribute__((overloadable)) upsample (char3 hi, uchar3 lo);
+short4 const_func __attribute__((overloadable)) upsample (char4 hi, uchar4 lo);
+short8 const_func __attribute__((overloadable)) upsample (char8 hi, uchar8 lo);
+short16 const_func __attribute__((overloadable)) upsample (char16 hi, uchar16 lo);
+ushort2 const_func __attribute__((overloadable)) upsample (uchar2 hi, uchar2 lo);
+ushort3 const_func __attribute__((overloadable)) upsample (uchar3 hi, uchar3 lo);
+ushort4 const_func __attribute__((overloadable)) upsample (uchar4 hi, uchar4 lo);
+ushort8 const_func __attribute__((overloadable)) upsample (uchar8 hi, uchar8 lo);
+ushort16 const_func __attribute__((overloadable)) upsample (uchar16 hi, uchar16 lo);
+
 /**
  * result[i] = ((int)hi[i] << 16) | lo[i]
  * result[i] = ((uint)hi[i] << 16) | lo[i]
  */
-int __attribute__((overloadable)) upsample(short hi, ushort lo);
-uint __attribute__((overloadable)) upsample (ushort hi, ushort lo);
-int2 __attribute__((overloadable)) upsample (short2 hi, ushort2 lo);
-int3 __attribute__((overloadable)) upsample (short3 hi, ushort3 lo);
-int4 __attribute__((overloadable)) upsample (short4 hi, ushort4 lo);
-int8 __attribute__((overloadable)) upsample (short8 hi, ushort8 lo);
-int16 __attribute__((overloadable)) upsample (short16 hi, ushort16 lo);
-uint2 __attribute__((overloadable)) upsample (ushort2 hi, ushort2 lo);
-uint3 __attribute__((overloadable)) upsample (ushort3 hi, ushort3 lo);
-uint4 __attribute__((overloadable)) upsample (ushort4 hi, ushort4 lo);
-uint8 __attribute__((overloadable)) upsample (ushort8 hi, ushort8 lo);
-uint16 __attribute__((overloadable)) upsample (ushort16 hi, ushort16 lo);
+int const_func __attribute__((overloadable)) upsample(short hi, ushort lo);
+uint const_func __attribute__((overloadable)) upsample (ushort hi, ushort lo);
+int2 const_func __attribute__((overloadable)) upsample (short2 hi, ushort2 lo);
+int3 const_func __attribute__((overloadable)) upsample (short3 hi, ushort3 lo);
+int4 const_func __attribute__((overloadable)) upsample (short4 hi, ushort4 lo);
+int8 const_func __attribute__((overloadable)) upsample (short8 hi, ushort8 lo);
+int16 const_func __attribute__((overloadable)) upsample (short16 hi, ushort16 lo);
+uint2 const_func __attribute__((overloadable)) upsample (ushort2 hi, ushort2 lo);
+uint3 const_func __attribute__((overloadable)) upsample (ushort3 hi, ushort3 lo);
+uint4 const_func __attribute__((overloadable)) upsample (ushort4 hi, ushort4 lo);
+uint8 const_func __attribute__((overloadable)) upsample (ushort8 hi, ushort8 lo);
+uint16 const_func __attribute__((overloadable)) upsample (ushort16 hi, ushort16 lo);
 /**
  * result[i] = ((long)hi[i] << 32) | lo[i]
  * result[i] = ((ulong)hi[i] << 32) | lo[i]
  */
-long __attribute__((overloadable)) upsample(int hi, uint lo);
-ulong __attribute__((overloadable)) upsample (uint hi, uint lo);
-long2 __attribute__((overloadable)) upsample (int2 hi, uint2 lo);
-long3 __attribute__((overloadable)) upsample (int3 hi, uint3 lo);
-long4 __attribute__((overloadable)) upsample (int4 hi, uint4 lo);
-long8 __attribute__((overloadable)) upsample (int8 hi, uint8 lo);
-long16 __attribute__((overloadable)) upsample (int16 hi, uint16 lo);
-ulong2 __attribute__((overloadable)) upsample (uint2 hi, uint2 lo);
-ulong3 __attribute__((overloadable)) upsample (uint3 hi, uint3 lo);
-ulong4 __attribute__((overloadable)) upsample (uint4 hi, uint4 lo);
-ulong8 __attribute__((overloadable)) upsample (uint8 hi, uint8 lo);
-ulong16 __attribute__((overloadable)) upsample (uint16 hi, uint16 lo);
+long const_func __attribute__((overloadable)) upsample(int hi, uint lo);
+ulong const_func __attribute__((overloadable)) upsample (uint hi, uint lo);
+long2 const_func __attribute__((overloadable)) upsample (int2 hi, uint2 lo);
+long3 const_func __attribute__((overloadable)) upsample (int3 hi, uint3 lo);
+long4 const_func __attribute__((overloadable)) upsample (int4 hi, uint4 lo);
+long8 const_func __attribute__((overloadable)) upsample (int8 hi, uint8 lo);
+long16 const_func __attribute__((overloadable)) upsample (int16 hi, uint16 lo);
+ulong2 const_func __attribute__((overloadable)) upsample (uint2 hi, uint2 lo);
+ulong3 const_func __attribute__((overloadable)) upsample (uint3 hi, uint3 lo);
+ulong4 const_func __attribute__((overloadable)) upsample (uint4 hi, uint4 lo);
+ulong8 const_func __attribute__((overloadable)) upsample (uint8 hi, uint8 lo);
+ulong16 const_func __attribute__((overloadable)) upsample (uint16 hi, uint16 lo);
+
 
 /**
  * Multiply two 24-bit integer values x and y and add
@@ -2219,18 +2241,18 @@ ulong16 __attribute__((overloadable)) upsample (uint16 hi, uint16 lo);
  * Refer to definition of mul24 to see how the 24-bit
  * integer multiplication is performed.
  */
-int __attribute__((overloadable)) mad24(int x, int y, int z);
-uint __attribute__((overloadable)) mad24(uint x, uint y, uint z);
-int2 __attribute__((overloadable)) mad24(int2 x, int2 y, int2 z);
-uint2 __attribute__((overloadable)) mad24(uint2 x, uint2 y, uint2 z);
-int3 __attribute__((overloadable)) mad24(int3 x, int3 y, int3 z);
-uint3 __attribute__((overloadable)) mad24(uint3 x, uint3 y, uint3 z);
-int4 __attribute__((overloadable)) mad24(int4 x, int4 y, int4 z);
-uint4 __attribute__((overloadable)) mad24(uint4 x, uint4 y, uint4 z);
-int8 __attribute__((overloadable)) mad24(int8 x, int8 y, int8 z);
-uint8 __attribute__((overloadable)) mad24(uint8 x, uint8 y, uint8 z);
-int16 __attribute__((overloadable)) mad24(int16 x, int16 y, int16 z);
-uint16 __attribute__((overloadable)) mad24(uint16 x, uint16 y, uint16 z);
+int const_func __attribute__((overloadable)) mad24(int x, int y, int z);
+uint const_func __attribute__((overloadable)) mad24(uint x, uint y, uint z);
+int2 const_func __attribute__((overloadable)) mad24(int2 x, int2 y, int2 z);
+uint2 const_func __attribute__((overloadable)) mad24(uint2 x, uint2 y, uint2 z);
+int3 const_func __attribute__((overloadable)) mad24(int3 x, int3 y, int3 z);
+uint3 const_func __attribute__((overloadable)) mad24(uint3 x, uint3 y, uint3 z);
+int4 const_func __attribute__((overloadable)) mad24(int4 x, int4 y, int4 z);
+uint4 const_func __attribute__((overloadable)) mad24(uint4 x, uint4 y, uint4 z);
+int8 const_func __attribute__((overloadable)) mad24(int8 x, int8 y, int8 z);
+uint8 const_func __attribute__((overloadable)) mad24(uint8 x, uint8 y, uint8 z);
+int16 const_func __attribute__((overloadable)) mad24(int16 x, int16 y, int16 z);
+uint16 const_func __attribute__((overloadable)) mad24(uint16 x, uint16 y, uint16 z);
 
 /**
  * Multiply two 24-bit integer values x and y. x and y
@@ -2242,18 +2264,18 @@ uint16 __attribute__((overloadable)) mad24(uint16 x, uint16 y, uint16 z);
  * x and y are not in this range, the multiplication
  * result is implementation-defined.
  */
-int __attribute__((overloadable)) mul24(int x, int y);
-uint __attribute__((overloadable)) mul24(uint x, uint y);
-int2 __attribute__((overloadable)) mul24(int2 x, int2 y);
-uint2 __attribute__((overloadable)) mul24(uint2 x, uint2 y);
-int3 __attribute__((overloadable)) mul24(int3 x, int3 y);
-uint3 __attribute__((overloadable)) mul24(uint3 x, uint3 y);
-int4 __attribute__((overloadable)) mul24(int4 x, int4 y);
-uint4 __attribute__((overloadable)) mul24(uint4 x, uint4 y);
-int8 __attribute__((overloadable)) mul24(int8 x, int8 y);
-uint8 __attribute__((overloadable)) mul24(uint8 x, uint8 y);
-int16 __attribute__((overloadable)) mul24(int16 x, int16 y);
-uint16 __attribute__((overloadable)) mul24(uint16 x, uint16 y);
+int const_func __attribute__((overloadable)) mul24(int x, int y);
+uint const_func __attribute__((overloadable)) mul24(uint x, uint y);
+int2 const_func __attribute__((overloadable)) mul24(int2 x, int2 y);
+uint2 const_func __attribute__((overloadable)) mul24(uint2 x, uint2 y);
+int3 const_func __attribute__((overloadable)) mul24(int3 x, int3 y);
+uint3 const_func __attribute__((overloadable)) mul24(uint3 x, uint3 y);
+int4 const_func __attribute__((overloadable)) mul24(int4 x, int4 y);
+uint4 const_func __attribute__((overloadable)) mul24(uint4 x, uint4 y);
+int8 const_func __attribute__((overloadable)) mul24(int8 x, int8 y);
+uint8 const_func __attribute__((overloadable)) mul24(uint8 x, uint8 y);
+int16 const_func __attribute__((overloadable)) mul24(int16 x, int16 y);
+uint16 const_func __attribute__((overloadable)) mul24(uint16 x, uint16 y);
 
 // Common functions:
 
@@ -2261,60 +2283,64 @@ uint16 __attribute__((overloadable)) mul24(uint16 x, uint16 y);
  * Returns fmin(fmax(x, minval), maxval).
  * Results are undefined if minval > maxval.
  */
-float __attribute__((overloadable)) clamp(float x, float minval, float maxval);
-float2 __attribute__((overloadable)) clamp(float2 x, float2 minval, float2 maxval);
-float3 __attribute__((overloadable)) clamp(float3 x, float3 minval, float3 maxval);
-float4 __attribute__((overloadable)) clamp(float4 x, float4 minval, float4 maxval);
-float8 __attribute__((overloadable)) clamp(float8 x, float8 minval, float8 maxval);
-float16 __attribute__((overloadable)) clamp(float16 x, float16 minval, float16 maxval);
-float2 __attribute__((overloadable)) clamp(float2 x, float minval, float maxval);
-float3 __attribute__((overloadable)) clamp(float3 x, float minval, float maxval);
-float4 __attribute__((overloadable)) clamp(float4 x, float minval, float maxval);
-float8 __attribute__((overloadable)) clamp(float8 x, float minval, float maxval);
-float16 __attribute__((overloadable)) clamp(float16 x, float minval, float maxval);
+float const_func __attribute__((overloadable)) clamp(float x, float minval, float maxval);
+float2 const_func __attribute__((overloadable)) clamp(float2 x, float2 minval, float2 maxval);
+float3 const_func __attribute__((overloadable)) clamp(float3 x, float3 minval, float3 maxval);
+float4 const_func __attribute__((overloadable)) clamp(float4 x, float4 minval, float4 maxval);
+float8 const_func __attribute__((overloadable)) clamp(float8 x, float8 minval, float8 maxval);
+float16 const_func __attribute__((overloadable)) clamp(float16 x, float16 minval, float16 maxval);
+float2 const_func __attribute__((overloadable)) clamp(float2 x, float minval, float maxval);
+float3 const_func __attribute__((overloadable)) clamp(float3 x, float minval, float maxval);
+float4 const_func __attribute__((overloadable)) clamp(float4 x, float minval, float maxval);
+float8 const_func __attribute__((overloadable)) clamp(float8 x, float minval, float maxval);
+float16 const_func __attribute__((overloadable)) clamp(float16 x, float minval, float maxval);
+
 
 /**
  * Converts radians to degrees, i.e. (180 / PI) *
  * radians.
  */
-float __attribute__((overloadable)) degrees(float radians);
-float2 __attribute__((overloadable)) degrees(float2 radians);
-float3 __attribute__((overloadable)) degrees(float3 radians);
-float4 __attribute__((overloadable)) degrees(float4 radians);
-float8 __attribute__((overloadable)) degrees(float8 radians);
-float16 __attribute__((overloadable)) degrees(float16 radians);
+float const_func __attribute__((overloadable)) degrees(float radians);
+float2 const_func __attribute__((overloadable)) degrees(float2 radians);
+float3 const_func __attribute__((overloadable)) degrees(float3 radians);
+float4 const_func __attribute__((overloadable)) degrees(float4 radians);
+float8 const_func __attribute__((overloadable)) degrees(float8 radians);
+float16 const_func __attribute__((overloadable)) degrees(float16 radians);
+
 
 /**
  * Returns y if x < y, otherwise it returns x. If x and y
  * are infinite or NaN, the return values are undefined.
  */
-float __attribute__((overloadable)) max(float x, float y);
-float2 __attribute__((overloadable)) max(float2 x, float2 y);
-float3 __attribute__((overloadable)) max(float3 x, float3 y);
-float4 __attribute__((overloadable)) max(float4 x, float4 y);
-float8 __attribute__((overloadable)) max(float8 x, float8 y);
-float16 __attribute__((overloadable)) max(float16 x, float16 y);
-float2 __attribute__((overloadable)) max(float2 x, float y);
-float3 __attribute__((overloadable)) max(float3 x, float y);
-float4 __attribute__((overloadable)) max(float4 x, float y);
-float8 __attribute__((overloadable)) max(float8 x, float y);
-float16 __attribute__((overloadable)) max(float16 x, float y);
+float const_func __attribute__((overloadable)) max(float x, float y);
+float2 const_func __attribute__((overloadable)) max(float2 x, float2 y);
+float3 const_func __attribute__((overloadable)) max(float3 x, float3 y);
+float4 const_func __attribute__((overloadable)) max(float4 x, float4 y);
+float8 const_func __attribute__((overloadable)) max(float8 x, float8 y);
+float16 const_func __attribute__((overloadable)) max(float16 x, float16 y);
+float2 const_func __attribute__((overloadable)) max(float2 x, float y);
+float3 const_func __attribute__((overloadable)) max(float3 x, float y);
+float4 const_func __attribute__((overloadable)) max(float4 x, float y);
+float8 const_func __attribute__((overloadable)) max(float8 x, float y);
+float16 const_func __attribute__((overloadable)) max(float16 x, float y);
+
 
 /**
  * Returns y if y < x, otherwise it returns x. If x and y
  * are infinite or NaN, the return values are undefined.
  */
-float __attribute__((overloadable)) min(float x, float y);
-float2 __attribute__((overloadable)) min(float2 x, float2 y);
-float3 __attribute__((overloadable)) min(float3 x, float3 y);
-float4 __attribute__((overloadable)) min(float4 x, float4 y);
-float8 __attribute__((overloadable)) min(float8 x, float8 y);
-float16 __attribute__((overloadable)) min(float16 x, float16 y);
-float2 __attribute__((overloadable)) min(float2 x, float y);
-float3 __attribute__((overloadable)) min(float3 x, float y);
-float4 __attribute__((overloadable)) min(float4 x, float y);
-float8 __attribute__((overloadable)) min(float8 x, float y);
-float16 __attribute__((overloadable)) min(float16 x, float y);
+float const_func __attribute__((overloadable)) min(float x, float y);
+float2 const_func __attribute__((overloadable)) min(float2 x, float2 y);
+float3 const_func __attribute__((overloadable)) min(float3 x, float3 y);
+float4 const_func __attribute__((overloadable)) min(float4 x, float4 y);
+float8 const_func __attribute__((overloadable)) min(float8 x, float8 y);
+float16 const_func __attribute__((overloadable)) min(float16 x, float16 y);
+float2 const_func __attribute__((overloadable)) min(float2 x, float y);
+float3 const_func __attribute__((overloadable)) min(float3 x, float y);
+float4 const_func __attribute__((overloadable)) min(float4 x, float y);
+float8 const_func __attribute__((overloadable)) min(float8 x, float y);
+float16 const_func __attribute__((overloadable)) min(float16 x, float y);
+
 
 /**
  * Returns the linear blend of x & y implemented as:
@@ -2323,43 +2349,46 @@ float16 __attribute__((overloadable)) min(float16 x, float y);
  * in the range 0.0 ... 1.0, the return values are
  * undefined.
  */
-float __attribute__((overloadable)) mix(float x, float y, float a);
-float2 __attribute__((overloadable)) mix(float2 x, float2 y, float2 a);
-float3 __attribute__((overloadable)) mix(float3 x, float3 y, float3 a);
-float4 __attribute__((overloadable)) mix(float4 x, float4 y, float4 a);
-float8 __attribute__((overloadable)) mix(float8 x, float8 y, float8 a);
-float16 __attribute__((overloadable)) mix(float16 x, float16 y, float16 a);
-float2 __attribute__((overloadable)) mix(float2 x, float2 y, float a);
-float3 __attribute__((overloadable)) mix(float3 x, float3 y, float a);
-float4 __attribute__((overloadable)) mix(float4 x, float4 y, float a);
-float8 __attribute__((overloadable)) mix(float8 x, float8 y, float a);
-float16 __attribute__((overloadable)) mix(float16 x, float16 y, float a);
+float const_func __attribute__((overloadable)) mix(float x, float y, float a);
+float2 const_func __attribute__((overloadable)) mix(float2 x, float2 y, float2 a);
+float3 const_func __attribute__((overloadable)) mix(float3 x, float3 y, float3 a);
+float4 const_func __attribute__((overloadable)) mix(float4 x, float4 y, float4 a);
+float8 const_func __attribute__((overloadable)) mix(float8 x, float8 y, float8 a);
+float16 const_func __attribute__((overloadable)) mix(float16 x, float16 y, float16 a);
+float2 const_func __attribute__((overloadable)) mix(float2 x, float2 y, float a);
+float3 const_func __attribute__((overloadable)) mix(float3 x, float3 y, float a);
+float4 const_func __attribute__((overloadable)) mix(float4 x, float4 y, float a);
+float8 const_func __attribute__((overloadable)) mix(float8 x, float8 y, float a);
+float16 const_func __attribute__((overloadable)) mix(float16 x, float16 y, float a);
+
 
 /**
  * Converts degrees to radians, i.e. (PI / 180) *
  * degrees.
  */
-float __attribute__((overloadable)) radians(float degrees);
-float2 __attribute__((overloadable)) radians(float2 degrees);
-float3 __attribute__((overloadable)) radians(float3 degrees);
-float4 __attribute__((overloadable)) radians(float4 degrees);
-float8 __attribute__((overloadable)) radians(float8 degrees);
-float16 __attribute__((overloadable)) radians(float16 degrees);
+float const_func __attribute__((overloadable)) radians(float degrees);
+float2 const_func __attribute__((overloadable)) radians(float2 degrees);
+float3 const_func __attribute__((overloadable)) radians(float3 degrees);
+float4 const_func __attribute__((overloadable)) radians(float4 degrees);
+float8 const_func __attribute__((overloadable)) radians(float8 degrees);
+float16 const_func __attribute__((overloadable)) radians(float16 degrees);
+
 
 /**
  * Returns 0.0 if x < edge, otherwise it returns 1.0.
  */
-float __attribute__((overloadable)) step(float edge, float x);
-float2 __attribute__((overloadable)) step(float2 edge, float2 x);
-float3 __attribute__((overloadable)) step(float3 edge, float3 x);
-float4 __attribute__((overloadable)) step(float4 edge, float4 x);
-float8 __attribute__((overloadable)) step(float8 edge, float8 x);
-float16 __attribute__((overloadable)) step(float16 edge, float16 x);
-float2 __attribute__((overloadable)) step(float edge, float2 x);
-float3 __attribute__((overloadable)) step(float edge, float3 x);
-float4 __attribute__((overloadable)) step(float edge, float4 x);
-float8 __attribute__((overloadable)) step(float edge, float8 x);
-float16 __attribute__((overloadable)) step(float edge, float16 x);
+float const_func __attribute__((overloadable)) step(float edge, float x);
+float2 const_func __attribute__((overloadable)) step(float2 edge, float2 x);
+float3 const_func __attribute__((overloadable)) step(float3 edge, float3 x);
+float4 const_func __attribute__((overloadable)) step(float4 edge, float4 x);
+float8 const_func __attribute__((overloadable)) step(float8 edge, float8 x);
+float16 const_func __attribute__((overloadable)) step(float16 edge, float16 x);
+float2 const_func __attribute__((overloadable)) step(float edge, float2 x);
+float3 const_func __attribute__((overloadable)) step(float edge, float3 x);
+float4 const_func __attribute__((overloadable)) step(float edge, float4 x);
+float8 const_func __attribute__((overloadable)) step(float edge, float8 x);
+float16 const_func __attribute__((overloadable)) step(float edge, float16 x);
+
 
 /**
  * Returns 0.0 if x <= edge0 and 1.0 if x >= edge1 and
@@ -2374,28 +2403,30 @@ float16 __attribute__((overloadable)) step(float edge, float16 x);
  * Results are undefined if edge0 >= edge1 or if x,
  * edge0 or edge1 is a NaN.
  */
-float __attribute__((overloadable)) smoothstep(float edge0, float edge1, float x);
-float2 __attribute__((overloadable)) smoothstep(float2 edge0, float2 edge1, float2 x);
-float3 __attribute__((overloadable)) smoothstep(float3 edge0, float3 edge1, float3 x);
-float4 __attribute__((overloadable)) smoothstep(float4 edge0, float4 edge1, float4 x);
-float8 __attribute__((overloadable)) smoothstep(float8 edge0, float8 edge1, float8 x);
-float16 __attribute__((overloadable)) smoothstep(float16 edge0, float16 edge1, float16 x);
-float2 __attribute__((overloadable)) smoothstep(float edge0, float edge1, float2 x);
-float3 __attribute__((overloadable)) smoothstep(float edge0, float edge1, float3 x);
-float4 __attribute__((overloadable)) smoothstep(float edge0, float edge1, float4 x);
-float8 __attribute__((overloadable)) smoothstep(float edge0, float edge1, float8 x);
-float16 __attribute__((overloadable)) smoothstep(float edge0, float edge1, float16 x);
+float const_func __attribute__((overloadable)) smoothstep(float edge0, float edge1, float x);
+float2 const_func __attribute__((overloadable)) smoothstep(float2 edge0, float2 edge1, float2 x);
+float3 const_func __attribute__((overloadable)) smoothstep(float3 edge0, float3 edge1, float3 x);
+float4 const_func __attribute__((overloadable)) smoothstep(float4 edge0, float4 edge1, float4 x);
+float8 const_func __attribute__((overloadable)) smoothstep(float8 edge0, float8 edge1, float8 x);
+float16 const_func __attribute__((overloadable)) smoothstep(float16 edge0, float16 edge1, float16 x);
+float2 const_func __attribute__((overloadable)) smoothstep(float edge0, float edge1, float2 x);
+float3 const_func __attribute__((overloadable)) smoothstep(float edge0, float edge1, float3 x);
+float4 const_func __attribute__((overloadable)) smoothstep(float edge0, float edge1, float4 x);
+float8 const_func __attribute__((overloadable)) smoothstep(float edge0, float edge1, float8 x);
+float16 const_func __attribute__((overloadable)) smoothstep(float edge0, float edge1, float16 x);
+
 
 /**
  * Returns 1.0 if x > 0, -0.0 if x = -0.0, +0.0 if x =
  * +0.0, or -1.0 if x < 0. Returns 0.0 if x is a NaN.
  */
-float __attribute__((overloadable)) sign(float x);
-float2 __attribute__((overloadable)) sign(float2 x);
-float3 __attribute__((overloadable)) sign(float3 x);
-float4 __attribute__((overloadable)) sign(float4 x);
-float8 __attribute__((overloadable)) sign(float8 x);
-float16 __attribute__((overloadable)) sign(float16 x);
+float const_func __attribute__((overloadable)) sign(float x);
+float2 const_func __attribute__((overloadable)) sign(float2 x);
+float3 const_func __attribute__((overloadable)) sign(float3 x);
+float4 const_func __attribute__((overloadable)) sign(float4 x);
+float8 const_func __attribute__((overloadable)) sign(float8 x);
+float16 const_func __attribute__((overloadable)) sign(float16 x);
+
 
 // Geometric functions:
 
@@ -2403,25 +2434,28 @@ float16 __attribute__((overloadable)) sign(float16 x);
  * Returns the cross product of p0.xyz and p1.xyz. The
  * w component of float4 result returned will be 0.0.
  */
-float4 __attribute__((overloadable)) cross(float4 p0, float4 p1);
-float3 __attribute__((overloadable)) cross (float3 p0, float3 p1);
+float4 const_func __attribute__((overloadable)) cross(float4 p0, float4 p1);
+float3 const_func __attribute__((overloadable)) cross (float3 p0, float3 p1);
+
 
 /**
  * Compute dot product.
  */
-float __attribute__((overloadable)) dot(float p0, float p1);
-float __attribute__((overloadable)) dot(float2 p0, float2 p1);
-float __attribute__((overloadable)) dot(float3 p0, float3 p1);
-float __attribute__((overloadable)) dot(float4 p0, float4 p1);
+float const_func __attribute__((overloadable)) dot(float p0, float p1);
+float const_func __attribute__((overloadable)) dot(float2 p0, float2 p1);
+float const_func __attribute__((overloadable)) dot(float3 p0, float3 p1);
+float const_func __attribute__((overloadable)) dot(float4 p0, float4 p1);
+
 
 /**
  * Returns the distance between p0 and p1. This is
  * calculated as length(p0 - p1).
  */
-float __attribute__((overloadable)) distance(float p0, float p1);
-float __attribute__((overloadable)) distance(float2 p0, float2 p1);
-float __attribute__((overloadable)) distance(float3 p0, float3 p1);
-float __attribute__((overloadable)) distance(float4 p0, float4 p1);
+float const_func __attribute__((overloadable)) distance(float p0, float p1);
+float const_func __attribute__((overloadable)) distance(float2 p0, float2 p1);
+float const_func __attribute__((overloadable)) distance(float3 p0, float3 p1);
+float const_func __attribute__((overloadable)) distance(float4 p0, float4 p1);
+
 
 /**
  * Return the length of vector p, i.e.,
@@ -2444,19 +2478,19 @@ float4 __attribute__((overloadable)) normalize(float4 p);
 /**
  * Returns fast_length(p0 - p1).
  */
-float __attribute__((overloadable)) fast_distance(float p0, float p1);
-float __attribute__((overloadable)) fast_distance(float2 p0, float2 p1);
-float __attribute__((overloadable)) fast_distance(float3 p0, float3 p1);
-float __attribute__((overloadable)) fast_distance(float4 p0, float4 p1);
+float const_func __attribute__((overloadable)) fast_distance(float p0, float p1);
+float const_func __attribute__((overloadable)) fast_distance(float2 p0, float2 p1);
+float const_func __attribute__((overloadable)) fast_distance(float3 p0, float3 p1);
+float const_func __attribute__((overloadable)) fast_distance(float4 p0, float4 p1);
 
 /**
  * Returns the length of vector p computed as:
  * half_sqrt(p.x2 + p.y2 + ...)
  */
-float __attribute__((overloadable)) fast_length(float p);
-float __attribute__((overloadable)) fast_length(float2 p);
-float __attribute__((overloadable)) fast_length(float3 p);
-float __attribute__((overloadable)) fast_length(float4 p);
+float const_func __attribute__((overloadable)) fast_length(float p);
+float const_func __attribute__((overloadable)) fast_length(float2 p);
+float const_func __attribute__((overloadable)) fast_length(float3 p);
+float const_func __attribute__((overloadable)) fast_length(float4 p);
 
 /**
  * Returns a vector in the same direction as p but with a
@@ -2474,15 +2508,15 @@ float __attribute__((overloadable)) fast_length(float4 p);
  * result vector are undefined.
  * 2) If the sum of squares is less than FLT_MIN then
  * the implementation may return back p.
- * 3) If the device is in “denorms are flushed to zero”
+ * 3) If the device is in "denorms are flushed to zero"
  * mode, individual operand elements with magnitude
  * less than sqrt(FLT_MIN) may be flushed to zero
  * before proceeding with the calculation.
  */
-float __attribute__((overloadable)) fast_normalize(float p);
-float2 __attribute__((overloadable)) fast_normalize(float2 p);
-float3 __attribute__((overloadable)) fast_normalize(float3 p);
-float4 __attribute__((overloadable)) fast_normalize(float4 p);
+float const_func __attribute__((overloadable)) fast_normalize(float p);
+float2 const_func __attribute__((overloadable)) fast_normalize(float2 p);
+float3 const_func __attribute__((overloadable)) fast_normalize(float3 p);
+float4 const_func __attribute__((overloadable)) fast_normalize(float4 p);
 
 // Relational functions:
 
@@ -2640,59 +2674,59 @@ int16 __attribute__((overloadable)) signbit(float16);
  * Returns 1 if the most significant bit in any component
  * of x is set; otherwise returns 0.
  */
-int __attribute__((overloadable)) any(char x);
-int __attribute__((overloadable)) any(char2 x);
-int __attribute__((overloadable)) any(char3 x);
-int __attribute__((overloadable)) any(char4 x);
-int __attribute__((overloadable)) any(char8 x);
-int __attribute__((overloadable)) any(char16 x);
-int __attribute__((overloadable)) any(short x);
-int __attribute__((overloadable)) any(short2 x);
-int __attribute__((overloadable)) any(short3 x);
-int __attribute__((overloadable)) any(short4 x);
-int __attribute__((overloadable)) any(short8 x);
-int __attribute__((overloadable)) any(short16 x);
-int __attribute__((overloadable)) any(int x);
-int __attribute__((overloadable)) any(int2 x);
-int __attribute__((overloadable)) any(int3 x);
-int __attribute__((overloadable)) any(int4 x);
-int __attribute__((overloadable)) any(int8 x);
-int __attribute__((overloadable)) any(int16 x);
-int __attribute__((overloadable)) any(long x);
-int __attribute__((overloadable)) any(long2 x);
-int __attribute__((overloadable)) any(long3 x);
-int __attribute__((overloadable)) any(long4 x);
-int __attribute__((overloadable)) any(long8 x);
-int __attribute__((overloadable)) any(long16 x);
+int const_func __attribute__((overloadable)) any(char x);
+int const_func __attribute__((overloadable)) any(char2 x);
+int const_func __attribute__((overloadable)) any(char3 x);
+int const_func __attribute__((overloadable)) any(char4 x);
+int const_func __attribute__((overloadable)) any(char8 x);
+int const_func __attribute__((overloadable)) any(char16 x);
+int const_func __attribute__((overloadable)) any(short x);
+int const_func __attribute__((overloadable)) any(short2 x);
+int const_func __attribute__((overloadable)) any(short3 x);
+int const_func __attribute__((overloadable)) any(short4 x);
+int const_func __attribute__((overloadable)) any(short8 x);
+int const_func __attribute__((overloadable)) any(short16 x);
+int const_func __attribute__((overloadable)) any(int x);
+int const_func __attribute__((overloadable)) any(int2 x);
+int const_func __attribute__((overloadable)) any(int3 x);
+int const_func __attribute__((overloadable)) any(int4 x);
+int const_func __attribute__((overloadable)) any(int8 x);
+int const_func __attribute__((overloadable)) any(int16 x);
+int const_func __attribute__((overloadable)) any(long x);
+int const_func __attribute__((overloadable)) any(long2 x);
+int const_func __attribute__((overloadable)) any(long3 x);
+int const_func __attribute__((overloadable)) any(long4 x);
+int const_func __attribute__((overloadable)) any(long8 x);
+int const_func __attribute__((overloadable)) any(long16 x);
 
 /**
  * Returns 1 if the most significant bit in all components
  * of x is set; otherwise returns 0.
  */
-int __attribute__((overloadable)) all(char x);
-int __attribute__((overloadable)) all(char2 x);
-int __attribute__((overloadable)) all(char3 x);
-int __attribute__((overloadable)) all(char4 x);
-int __attribute__((overloadable)) all(char8 x);
-int __attribute__((overloadable)) all(char16 x);
-int __attribute__((overloadable)) all(short x);
-int __attribute__((overloadable)) all(short2 x);
-int __attribute__((overloadable)) all(short3 x);
-int __attribute__((overloadable)) all(short4 x);
-int __attribute__((overloadable)) all(short8 x);
-int __attribute__((overloadable)) all(short16 x);
-int __attribute__((overloadable)) all(int x);
-int __attribute__((overloadable)) all(int2 x);
-int __attribute__((overloadable)) all(int3 x);
-int __attribute__((overloadable)) all(int4 x);
-int __attribute__((overloadable)) all(int8 x);
-int __attribute__((overloadable)) all(int16 x);
-int __attribute__((overloadable)) all(long x);
-int __attribute__((overloadable)) all(long2 x);
-int __attribute__((overloadable)) all(long3 x);
-int __attribute__((overloadable)) all(long4 x);
-int __attribute__((overloadable)) all(long8 x);
-int __attribute__((overloadable)) all(long16 x);
+int const_func __attribute__((overloadable)) all(char x);
+int const_func __attribute__((overloadable)) all(char2 x);
+int const_func __attribute__((overloadable)) all(char3 x);
+int const_func __attribute__((overloadable)) all(char4 x);
+int const_func __attribute__((overloadable)) all(char8 x);
+int const_func __attribute__((overloadable)) all(char16 x);
+int const_func __attribute__((overloadable)) all(short x);
+int const_func __attribute__((overloadable)) all(short2 x);
+int const_func __attribute__((overloadable)) all(short3 x);
+int const_func __attribute__((overloadable)) all(short4 x);
+int const_func __attribute__((overloadable)) all(short8 x);
+int const_func __attribute__((overloadable)) all(short16 x);
+int const_func __attribute__((overloadable)) all(int x);
+int const_func __attribute__((overloadable)) all(int2 x);
+int const_func __attribute__((overloadable)) all(int3 x);
+int const_func __attribute__((overloadable)) all(int4 x);
+int const_func __attribute__((overloadable)) all(int8 x);
+int const_func __attribute__((overloadable)) all(int16 x);
+int const_func __attribute__((overloadable)) all(long x);
+int const_func __attribute__((overloadable)) all(long2 x);
+int const_func __attribute__((overloadable)) all(long3 x);
+int const_func __attribute__((overloadable)) all(long4 x);
+int const_func __attribute__((overloadable)) all(long8 x);
+int const_func __attribute__((overloadable)) all(long16 x);
 
 /**
  * Each bit of the result is the corresponding bit of a if
@@ -2759,438 +2793,439 @@ float16 __attribute__((overloadable)) bitselect(float16 a, float16 b, float16 c)
  * result[i] = if MSB of c[i] is set ? b[i] : a[i].
  * For a scalar type, result = c ? b : a.
  */
-char __attribute__((overloadable)) select(char a, char b, char c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, char c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, char2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, char2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, char3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, char3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, char4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, char4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, char8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, char8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, char16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, char16 c);
-short __attribute__((overloadable)) select(short a, short b, char c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, char c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, char2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, char2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, char3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, char3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, char4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, char4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, char8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, char8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, char16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, char16 c);
-int __attribute__((overloadable)) select(int a, int b, char c);
-uint __attribute__((overloadable)) select(uint a, uint b, char c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, char2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, char2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, char3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, char3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, char4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, char4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, char8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, char8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, char16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, char16 c);
-long __attribute__((overloadable)) select(long a, long b, char c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, char c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, char2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, char2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, char3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, char3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, char4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, char4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, char8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, char8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, char16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, char16 c);
-float __attribute__((overloadable)) select(float a, float b, char c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, char2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, char3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, char4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, char8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, char16 c);
-char __attribute__((overloadable)) select(char a, char b, short c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, short c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, short2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, short2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, short3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, short3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, short4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, short4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, short8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, short8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, short16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, short16 c);
-short __attribute__((overloadable)) select(short a, short b, short c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, short c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, short2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, short2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, short3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, short3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, short4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, short4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, short8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, short8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, short16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, short16 c);
-int __attribute__((overloadable)) select(int a, int b, short c);
-uint __attribute__((overloadable)) select(uint a, uint b, short c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, short2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, short2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, short3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, short3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, short4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, short4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, short8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, short8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, short16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, short16 c);
-long __attribute__((overloadable)) select(long a, long b, short c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, short c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, short2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, short2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, short3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, short3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, short4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, short4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, short8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, short8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, short16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, short16 c);
-float __attribute__((overloadable)) select(float a, float b, short c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, short2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, short3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, short4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, short8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, short16 c);
-char __attribute__((overloadable)) select(char a, char b, int c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, int c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, int2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, int2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, int3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, int3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, int4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, int4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, int8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, int8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, int16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, int16 c);
-short __attribute__((overloadable)) select(short a, short b, int c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, int c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, int2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, int2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, int3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, int3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, int4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, int4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, int8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, int8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, int16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, int16 c);
-int __attribute__((overloadable)) select(int a, int b, int c);
-uint __attribute__((overloadable)) select(uint a, uint b, int c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, int2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, int2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, int3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, int3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, int4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, int4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, int8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, int8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, int16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, int16 c);
-long __attribute__((overloadable)) select(long a, long b, int c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, int c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, int2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, int2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, int3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, int3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, int4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, int4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, int8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, int8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, int16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, int16 c);
-float __attribute__((overloadable)) select(float a, float b, int c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, int2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, int3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, int4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, int8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, int16 c);
-char __attribute__((overloadable)) select(char a, char b, long c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, long c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, long2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, long2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, long3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, long3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, long4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, long4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, long8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, long8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, long16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, long16 c);
-short __attribute__((overloadable)) select(short a, short b, long c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, long c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, long2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, long2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, long3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, long3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, long4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, long4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, long8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, long8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, long16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, long16 c);
-int __attribute__((overloadable)) select(int a, int b, long c);
-uint __attribute__((overloadable)) select(uint a, uint b, long c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, long2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, long2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, long3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, long3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, long4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, long4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, long8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, long8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, long16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, long16 c);
-long __attribute__((overloadable)) select(long a, long b, long c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, long c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, long2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, long2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, long3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, long3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, long4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, long4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, long8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, long8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, long16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, long16 c);
-float __attribute__((overloadable)) select(float a, float b, long c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, long2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, long3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, long4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, long8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, long16 c);
-char __attribute__((overloadable)) select(char a, char b, uchar c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, uchar c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, uchar2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, uchar2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, uchar3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, uchar3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, uchar4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, uchar4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, uchar8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, uchar8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, uchar16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, uchar16 c);
-short __attribute__((overloadable)) select(short a, short b, uchar c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, uchar c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, uchar2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, uchar2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, uchar3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, uchar3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, uchar4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, uchar4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, uchar8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, uchar8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, uchar16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, uchar16 c);
-int __attribute__((overloadable)) select(int a, int b, uchar c);
-uint __attribute__((overloadable)) select(uint a, uint b, uchar c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, uchar2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, uchar2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, uchar3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, uchar3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, uchar4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, uchar4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, uchar8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, uchar8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, uchar16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, uchar16 c);
-long __attribute__((overloadable)) select(long a, long b, uchar c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, uchar c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, uchar2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, uchar2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, uchar3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, uchar3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, uchar4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, uchar4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, uchar8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, uchar8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, uchar16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, uchar16 c);
-float __attribute__((overloadable)) select(float a, float b, uchar c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, uchar2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, uchar3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, uchar4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, uchar8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, uchar16 c);
-char __attribute__((overloadable)) select(char a, char b, ushort c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, ushort c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, ushort2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, ushort2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, ushort3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, ushort3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, ushort4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, ushort4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, ushort8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, ushort8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, ushort16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, ushort16 c);
-short __attribute__((overloadable)) select(short a, short b, ushort c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, ushort c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, ushort2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, ushort2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, ushort3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, ushort3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, ushort4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, ushort4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, ushort8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, ushort8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, ushort16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, ushort16 c);
-int __attribute__((overloadable)) select(int a, int b, ushort c);
-uint __attribute__((overloadable)) select(uint a, uint b, ushort c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, ushort2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, ushort2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, ushort3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, ushort3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, ushort4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, ushort4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, ushort8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, ushort8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, ushort16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, ushort16 c);
-long __attribute__((overloadable)) select(long a, long b, ushort c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, ushort c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, ushort2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, ushort2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, ushort3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, ushort3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, ushort4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, ushort4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, ushort8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, ushort8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, ushort16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, ushort16 c);
-float __attribute__((overloadable)) select(float a, float b, ushort c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, ushort2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, ushort3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, ushort4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, ushort8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, ushort16 c);
-char __attribute__((overloadable)) select(char a, char b, uint c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, uint c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, uint2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, uint2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, uint3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, uint3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, uint4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, uint4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, uint8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, uint8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, uint16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, uint16 c);
-short __attribute__((overloadable)) select(short a, short b, uint c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, uint c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, uint2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, uint2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, uint3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, uint3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, uint4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, uint4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, uint8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, uint8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, uint16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, uint16 c);
-int __attribute__((overloadable)) select(int a, int b, uint c);
-uint __attribute__((overloadable)) select(uint a, uint b, uint c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, uint2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, uint2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, uint3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, uint3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, uint4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, uint4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, uint8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, uint8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, uint16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, uint16 c);
-long __attribute__((overloadable)) select(long a, long b, uint c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, uint c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, uint2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, uint2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, uint3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, uint3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, uint4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, uint4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, uint8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, uint8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, uint16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, uint16 c);
-float __attribute__((overloadable)) select(float a, float b, uint c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, uint2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, uint3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, uint4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, uint8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, uint16 c);
-char __attribute__((overloadable)) select(char a, char b, ulong c);
-uchar __attribute__((overloadable)) select(uchar a, uchar b, ulong c);
-char2 __attribute__((overloadable)) select(char2 a, char2 b, ulong2 c);
-uchar2 __attribute__((overloadable)) select(uchar2 a, uchar2 b, ulong2 c);
-char3 __attribute__((overloadable)) select(char3 a, char3 b, ulong3 c);
-uchar3 __attribute__((overloadable)) select(uchar3 a, uchar3 b, ulong3 c);
-char4 __attribute__((overloadable)) select(char4 a, char4 b, ulong4 c);
-uchar4 __attribute__((overloadable)) select(uchar4 a, uchar4 b, ulong4 c);
-char8 __attribute__((overloadable)) select(char8 a, char8 b, ulong8 c);
-uchar8 __attribute__((overloadable)) select(uchar8 a, uchar8 b, ulong8 c);
-char16 __attribute__((overloadable)) select(char16 a, char16 b, ulong16 c);
-uchar16 __attribute__((overloadable)) select(uchar16 a, uchar16 b, ulong16 c);
-short __attribute__((overloadable)) select(short a, short b, ulong c);
-ushort __attribute__((overloadable)) select(ushort a, ushort b, ulong c);
-short2 __attribute__((overloadable)) select(short2 a, short2 b, ulong2 c);
-ushort2 __attribute__((overloadable)) select(ushort2 a, ushort2 b, ulong2 c);
-short3 __attribute__((overloadable)) select(short3 a, short3 b, ulong3 c);
-ushort3 __attribute__((overloadable)) select(ushort3 a, ushort3 b, ulong3 c);
-short4 __attribute__((overloadable)) select(short4 a, short4 b, ulong4 c);
-ushort4 __attribute__((overloadable)) select(ushort4 a, ushort4 b, ulong4 c);
-short8 __attribute__((overloadable)) select(short8 a, short8 b, ulong8 c);
-ushort8 __attribute__((overloadable)) select(ushort8 a, ushort8 b, ulong8 c);
-short16 __attribute__((overloadable)) select(short16 a, short16 b, ulong16 c);
-ushort16 __attribute__((overloadable)) select(ushort16 a, ushort16 b, ulong16 c);
-int __attribute__((overloadable)) select(int a, int b, ulong c);
-uint __attribute__((overloadable)) select(uint a, uint b, ulong c);
-int2 __attribute__((overloadable)) select(int2 a, int2 b, ulong2 c);
-uint2 __attribute__((overloadable)) select(uint2 a, uint2 b, ulong2 c);
-int3 __attribute__((overloadable)) select(int3 a, int3 b, ulong3 c);
-uint3 __attribute__((overloadable)) select(uint3 a, uint3 b, ulong3 c);
-int4 __attribute__((overloadable)) select(int4 a, int4 b, ulong4 c);
-uint4 __attribute__((overloadable)) select(uint4 a, uint4 b, ulong4 c);
-int8 __attribute__((overloadable)) select(int8 a, int8 b, ulong8 c);
-uint8 __attribute__((overloadable)) select(uint8 a, uint8 b, ulong8 c);
-int16 __attribute__((overloadable)) select(int16 a, int16 b, ulong16 c);
-uint16 __attribute__((overloadable)) select(uint16 a, uint16 b, ulong16 c);
-long __attribute__((overloadable)) select(long a, long b, ulong c);
-ulong __attribute__((overloadable)) select(ulong a, ulong b, ulong c);
-long2 __attribute__((overloadable)) select(long2 a, long2 b, ulong2 c);
-ulong2 __attribute__((overloadable)) select(ulong2 a, ulong2 b, ulong2 c);
-long3 __attribute__((overloadable)) select(long3 a, long3 b, ulong3 c);
-ulong3 __attribute__((overloadable)) select(ulong3 a, ulong3 b, ulong3 c);
-long4 __attribute__((overloadable)) select(long4 a, long4 b, ulong4 c);
-ulong4 __attribute__((overloadable)) select(ulong4 a, ulong4 b, ulong4 c);
-long8 __attribute__((overloadable)) select(long8 a, long8 b, ulong8 c);
-ulong8 __attribute__((overloadable)) select(ulong8 a, ulong8 b, ulong8 c);
-long16 __attribute__((overloadable)) select(long16 a, long16 b, ulong16 c);
-ulong16 __attribute__((overloadable)) select(ulong16 a, ulong16 b, ulong16 c);
-float __attribute__((overloadable)) select(float a, float b, ulong c);
-float2 __attribute__((overloadable)) select(float2 a, float2 b, ulong2 c);
-float3 __attribute__((overloadable)) select(float3 a, float3 b, ulong3 c);
-float4 __attribute__((overloadable)) select(float4 a, float4 b, ulong4 c);
-float8 __attribute__((overloadable)) select(float8 a, float8 b, ulong8 c);
-float16 __attribute__((overloadable)) select(float16 a, float16 b, ulong16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, char c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, char c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, char2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, char2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, char3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, char3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, char4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, char4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, char8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, char8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, char16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, char16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, char c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, char c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, char2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, char2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, char3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, char3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, char4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, char4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, char8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, char8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, char16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, char16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, char c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, char c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, char2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, char2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, char3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, char3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, char4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, char4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, char8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, char8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, char16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, char16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, char c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, char c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, char2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, char2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, char3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, char3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, char4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, char4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, char8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, char8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, char16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, char16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, char c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, char2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, char3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, char4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, char8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, char16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, short c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, short c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, short2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, short2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, short3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, short3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, short4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, short4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, short8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, short8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, short16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, short16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, short c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, short c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, short2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, short2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, short3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, short3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, short4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, short4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, short8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, short8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, short16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, short16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, short c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, short c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, short2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, short2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, short3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, short3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, short4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, short4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, short8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, short8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, short16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, short16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, short c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, short c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, short2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, short2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, short3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, short3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, short4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, short4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, short8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, short8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, short16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, short16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, short c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, short2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, short3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, short4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, short8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, short16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, int c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, int c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, int2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, int2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, int3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, int3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, int4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, int4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, int8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, int8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, int16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, int16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, int c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, int c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, int2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, int2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, int3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, int3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, int4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, int4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, int8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, int8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, int16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, int16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, int c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, int c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, int2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, int2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, int3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, int3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, int4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, int4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, int8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, int8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, int16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, int16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, int c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, int c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, int2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, int2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, int3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, int3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, int4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, int4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, int8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, int8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, int16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, int16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, int c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, int2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, int3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, int4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, int8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, int16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, long c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, long c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, long2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, long2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, long3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, long3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, long4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, long4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, long8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, long8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, long16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, long16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, long c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, long c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, long2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, long2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, long3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, long3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, long4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, long4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, long8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, long8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, long16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, long16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, long c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, long c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, long2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, long2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, long3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, long3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, long4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, long4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, long8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, long8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, long16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, long16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, long c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, long c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, long2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, long2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, long3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, long3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, long4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, long4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, long8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, long8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, long16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, long16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, long c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, long2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, long3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, long4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, long8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, long16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, uchar c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, uchar c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, uchar2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, uchar2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, uchar3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, uchar3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, uchar4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, uchar4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, uchar8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, uchar8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, uchar16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, uchar16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, uchar c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, uchar c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, uchar2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, uchar2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, uchar3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, uchar3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, uchar4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, uchar4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, uchar8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, uchar8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, uchar16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, uchar16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, uchar c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, uchar c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, uchar2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, uchar2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, uchar3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, uchar3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, uchar4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, uchar4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, uchar8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, uchar8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, uchar16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, uchar16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, uchar c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, uchar c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, uchar2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, uchar2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, uchar3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, uchar3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, uchar4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, uchar4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, uchar8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, uchar8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, uchar16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, uchar16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, uchar c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, uchar2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, uchar3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, uchar4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, uchar8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, uchar16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, ushort c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, ushort c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, ushort2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, ushort2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, ushort3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, ushort3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, ushort4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, ushort4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, ushort8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, ushort8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, ushort16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, ushort16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, ushort c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, ushort c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, ushort2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, ushort2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, ushort3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, ushort3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, ushort4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, ushort4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, ushort8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, ushort8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, ushort16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, ushort16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, ushort c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, ushort c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, ushort2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, ushort2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, ushort3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, ushort3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, ushort4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, ushort4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, ushort8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, ushort8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, ushort16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, ushort16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, ushort c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, ushort c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, ushort2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, ushort2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, ushort3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, ushort3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, ushort4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, ushort4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, ushort8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, ushort8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, ushort16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, ushort16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, ushort c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, ushort2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, ushort3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, ushort4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, ushort8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, ushort16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, uint c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, uint c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, uint2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, uint2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, uint3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, uint3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, uint4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, uint4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, uint8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, uint8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, uint16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, uint16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, uint c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, uint c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, uint2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, uint2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, uint3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, uint3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, uint4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, uint4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, uint8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, uint8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, uint16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, uint16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, uint c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, uint c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, uint2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, uint2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, uint3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, uint3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, uint4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, uint4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, uint8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, uint8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, uint16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, uint16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, uint c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, uint c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, uint2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, uint2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, uint3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, uint3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, uint4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, uint4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, uint8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, uint8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, uint16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, uint16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, uint c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, uint2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, uint3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, uint4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, uint8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, uint16 c);
+char const_func __attribute__((overloadable)) select(char a, char b, ulong c);
+uchar const_func __attribute__((overloadable)) select(uchar a, uchar b, ulong c);
+char2 const_func __attribute__((overloadable)) select(char2 a, char2 b, ulong2 c);
+uchar2 const_func __attribute__((overloadable)) select(uchar2 a, uchar2 b, ulong2 c);
+char3 const_func __attribute__((overloadable)) select(char3 a, char3 b, ulong3 c);
+uchar3 const_func __attribute__((overloadable)) select(uchar3 a, uchar3 b, ulong3 c);
+char4 const_func __attribute__((overloadable)) select(char4 a, char4 b, ulong4 c);
+uchar4 const_func __attribute__((overloadable)) select(uchar4 a, uchar4 b, ulong4 c);
+char8 const_func __attribute__((overloadable)) select(char8 a, char8 b, ulong8 c);
+uchar8 const_func __attribute__((overloadable)) select(uchar8 a, uchar8 b, ulong8 c);
+char16 const_func __attribute__((overloadable)) select(char16 a, char16 b, ulong16 c);
+uchar16 const_func __attribute__((overloadable)) select(uchar16 a, uchar16 b, ulong16 c);
+short const_func __attribute__((overloadable)) select(short a, short b, ulong c);
+ushort const_func __attribute__((overloadable)) select(ushort a, ushort b, ulong c);
+short2 const_func __attribute__((overloadable)) select(short2 a, short2 b, ulong2 c);
+ushort2 const_func __attribute__((overloadable)) select(ushort2 a, ushort2 b, ulong2 c);
+short3 const_func __attribute__((overloadable)) select(short3 a, short3 b, ulong3 c);
+ushort3 const_func __attribute__((overloadable)) select(ushort3 a, ushort3 b, ulong3 c);
+short4 const_func __attribute__((overloadable)) select(short4 a, short4 b, ulong4 c);
+ushort4 const_func __attribute__((overloadable)) select(ushort4 a, ushort4 b, ulong4 c);
+short8 const_func __attribute__((overloadable)) select(short8 a, short8 b, ulong8 c);
+ushort8 const_func __attribute__((overloadable)) select(ushort8 a, ushort8 b, ulong8 c);
+short16 const_func __attribute__((overloadable)) select(short16 a, short16 b, ulong16 c);
+ushort16 const_func __attribute__((overloadable)) select(ushort16 a, ushort16 b, ulong16 c);
+int const_func __attribute__((overloadable)) select(int a, int b, ulong c);
+uint const_func __attribute__((overloadable)) select(uint a, uint b, ulong c);
+int2 const_func __attribute__((overloadable)) select(int2 a, int2 b, ulong2 c);
+uint2 const_func __attribute__((overloadable)) select(uint2 a, uint2 b, ulong2 c);
+int3 const_func __attribute__((overloadable)) select(int3 a, int3 b, ulong3 c);
+uint3 const_func __attribute__((overloadable)) select(uint3 a, uint3 b, ulong3 c);
+int4 const_func __attribute__((overloadable)) select(int4 a, int4 b, ulong4 c);
+uint4 const_func __attribute__((overloadable)) select(uint4 a, uint4 b, ulong4 c);
+int8 const_func __attribute__((overloadable)) select(int8 a, int8 b, ulong8 c);
+uint8 const_func __attribute__((overloadable)) select(uint8 a, uint8 b, ulong8 c);
+int16 const_func __attribute__((overloadable)) select(int16 a, int16 b, ulong16 c);
+uint16 const_func __attribute__((overloadable)) select(uint16 a, uint16 b, ulong16 c);
+long const_func __attribute__((overloadable)) select(long a, long b, ulong c);
+ulong const_func __attribute__((overloadable)) select(ulong a, ulong b, ulong c);
+long2 const_func __attribute__((overloadable)) select(long2 a, long2 b, ulong2 c);
+ulong2 const_func __attribute__((overloadable)) select(ulong2 a, ulong2 b, ulong2 c);
+long3 const_func __attribute__((overloadable)) select(long3 a, long3 b, ulong3 c);
+ulong3 const_func __attribute__((overloadable)) select(ulong3 a, ulong3 b, ulong3 c);
+long4 const_func __attribute__((overloadable)) select(long4 a, long4 b, ulong4 c);
+ulong4 const_func __attribute__((overloadable)) select(ulong4 a, ulong4 b, ulong4 c);
+long8 const_func __attribute__((overloadable)) select(long8 a, long8 b, ulong8 c);
+ulong8 const_func __attribute__((overloadable)) select(ulong8 a, ulong8 b, ulong8 c);
+long16 const_func __attribute__((overloadable)) select(long16 a, long16 b, ulong16 c);
+ulong16 const_func __attribute__((overloadable)) select(ulong16 a, ulong16 b, ulong16 c);
+float const_func __attribute__((overloadable)) select(float a, float b, ulong c);
+float2 const_func __attribute__((overloadable)) select(float2 a, float2 b, ulong2 c);
+float3 const_func __attribute__((overloadable)) select(float3 a, float3 b, ulong3 c);
+float4 const_func __attribute__((overloadable)) select(float4 a, float4 b, ulong4 c);
+float8 const_func __attribute__((overloadable)) select(float8 a, float8 b, ulong8 c);
+float16 const_func __attribute__((overloadable)) select(float16 a, float16 b, ulong16 c);
+
 
 // Synchronization functions
 
